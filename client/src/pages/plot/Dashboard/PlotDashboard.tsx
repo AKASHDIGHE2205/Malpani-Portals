@@ -100,11 +100,16 @@ const ImageViewer = ({ src, alt, plots }: { src: string; alt: string; plots: any
 
   const applyZoom = (delta: number, centerX?: number, centerY?: number) => {
     setZoom(prev => {
-      const next = Math.min(4, Math.max(1, Math.round((prev + delta) * 100) / 100))
+      // Change this line - remove the upper bound (4) or set it to a very high number
+      // Option 1: Set a very high max (e.g., 20x or 2000%)
+      const next = Math.min(20, Math.max(1, Math.round((prev + delta) * 100) / 100))
+
+      // Option 2: No upper limit at all (uncomment below and comment the line above)
+      // const next = Math.max(0.5, Math.round((prev + delta) * 100) / 100)
+
       if (next === 1) {
         setPan({ x: 0, y: 0 })
       } else if (centerX !== undefined && centerY !== undefined && prev !== 1) {
-        // Adjust pan to zoom toward cursor/touch point
         const scale = next / prev
         setPan(prevPan => clampPan({
           x: centerX - (centerX - prevPan.x) * scale,
@@ -292,11 +297,11 @@ const ImageViewer = ({ src, alt, plots }: { src: string; alt: string; plots: any
         <span style={{ fontSize: 12, fontWeight: 600, color: "#475569", minWidth: 40, textAlign: "center" }}>
           {Math.round(zoom * 100)}%
         </span>
-        <button type="button" onClick={zoomIn} disabled={zoom >= 4}
+        <button type="button" onClick={zoomIn}
           style={{
             width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-            borderRadius: 6, border: "none", background: zoom >= 4 ? "#f1f5f9" : "#e2e8f0",
-            cursor: zoom >= 4 ? "not-allowed" : "pointer", opacity: zoom >= 4 ? 0.45 : 1
+            borderRadius: 6, border: "none", background: "#e2e8f0",
+            cursor: "pointer", opacity: 1
           }}
           title="Zoom In (Ctrl+Scroll)">
           <MdZoomIn size={14} color="#334155" />
@@ -412,10 +417,10 @@ const ImageViewer = ({ src, alt, plots }: { src: string; alt: string; plots: any
                   boxShadow: "0 4px 14px rgba(0,0,0,0.3)",
                   pointerEvents: "none", zIndex: 50,
                 }}>
-                  <div style={{ fontWeight: 700, marginBottom: 2 }}>Plot {plot.plot_no}</div>
+                  <div style={{ fontWeight: 700, marginBottom: 2 }}>Plot No : {plot.plot_no}</div>
+                  {plot.customer_name && (<div style={{ fontWeight: 300, marginBottom: 2 }}>Plot {plot.customer_name}</div>)}
                   <div style={{ opacity: 0.75, fontSize: 11 }}>{STATUS_LABELS[plot.status] ?? 'Unknown'}</div>
                   {plot.area && <div style={{ opacity: 0.75, fontSize: 11 }}>Area: {plot.area} sq ft</div>}
-                  {plot.price && <div style={{ opacity: 0.75, fontSize: 11 }}>₹{Number(plot.price).toLocaleString('en-IN')}</div>}
                   {/* arrow */}
                   <div style={{
                     position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)",

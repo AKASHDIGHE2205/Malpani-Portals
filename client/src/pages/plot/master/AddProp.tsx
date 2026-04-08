@@ -24,9 +24,7 @@ interface Plot {
   sold_date: string
   sold_amount: string
   vc_remarks: string
-  /** % of rendered image width  at zoom=1 (0–100). Image-relative, not container. */
   cX: string
-  /** % of rendered image height at zoom=1 (0–100). Image-relative, not container. */
   cY: string
 }
 
@@ -60,8 +58,8 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUS_LABELS: Record<string, string> = {
   O: "Open", H: "Hold", B: "Booked", S: "Sold", R: "Reserved", A: "Active", "": "—",
 }
-const MARKER_R = 18         // half-size (px) of a badge at zoom=1
-const VIEWER_H = 560        // px height of the viewer
+const MARKER_R = 18 
+const VIEWER_H = 560
 
 const generateId = () => Date.now().toString() + Math.random().toString(36).substr(2, 9)
 
@@ -81,7 +79,7 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
   const [zoom, setZoom] = useState(1)
   const [pan,  setPan]  = useState({ x: 0, y: 0 })
   const [loaded, setLoaded] = useState(false)
-  const [, tick] = useState(0)           // force re-render for marker positions
+  const [, tick] = useState(0)
 
   // refs to avoid stale closures in event handlers
   const zoomRef = useRef(zoom)
@@ -98,23 +96,8 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
 
   // ── coordinate helpers ──────────────────────────────────────────────────────
 
-  /**
-   * Get the rendered <img> rect in the page (respects object-contain letterbox).
-   * This is already in screen space — no transform needed because getBoundingClientRect
-   * reads the post-transform position automatically.
-   */
   const getImgRect = useCallback(() => imgRef.current?.getBoundingClientRect() ?? null, [])
 
-  /**
-   * Convert screen clientX/Y → image percentage (0–100).
-   * We need to "undo" zoom and pan so we can express the point
-   * relative to the base (zoom=1) image.
-   *
-   * The image is scaled around its own centre via CSS transform on the wrapper.
-   * imageRef.getBoundingClientRect() already gives the *zoomed* rect.
-   * So: pct = (client - imgRect.left) / imgRect.width * 100
-   * which equals the correct fraction of the zoomed image → same fraction at zoom=1. ✓
-   */
   const screenToImgPct = useCallback((cx: number, cy: number) => {
     const r = getImgRect()
     if (!r) return null
@@ -124,11 +107,6 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
     }
   }, [getImgRect])
 
-  /**
-   * Convert image percentage → CSS left/top pixel position in the container.
-   * Markers are positioned as children of the container div (not the transform wrapper),
-   * so we need container-relative pixel positions.
-   */
   const imgPctToContainerPx = useCallback((pctX: number, pctY: number) => {
     const ir = getImgRect()
     const cr = containerRef.current?.getBoundingClientRect()
@@ -145,7 +123,6 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
     const img = imgRef.current
     const con = containerRef.current
     if (!img || !con) return p
-    // unzoomed rendered size:
     const iw = img.offsetWidth
     const ih = img.offsetHeight
     const cw = con.offsetWidth
@@ -652,7 +629,7 @@ const AddProp = () => {
               <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
                 Plot Placement on Layout
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+              <p className="text-sm text-red-600 dark:text-red-400 mb-4">
                 Click a badge → then click its location on the image. Placed markers can be dragged to reposition.
                 Use zoom/pan to work on detailed areas — marker positions are always saved relative to the image, not the screen.
               </p>

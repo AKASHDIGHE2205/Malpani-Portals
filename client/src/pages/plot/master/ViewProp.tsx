@@ -181,17 +181,17 @@ const ViewProp = () => {
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white">
                   {project_details.project_name}
                 </h3>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(project_details.status)}`}>
+                {/* <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(project_details.status)}`}>
                   {project_details.status === 'A' ? 'Active' : 'Inactive'}
-                </span>
+                </span> */}
               </div>
               <div className="flex items-center gap-1 mt-2 text-slate-500 dark:text-slate-400 text-sm">
-                <FiMapPin className="w-4 h-4 flex-shrink-0 text-purple-700" />
+                <FiMapPin className="w-3 h-3 flex-shrink-0 text-purple-700" />
                 <span className="truncate">
                   {address.line1}, {address.city}, {address.state} - {address.pin_code}
                 </span>
               </div>
-              <div className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+              <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 Code: {project_details.ext_code} | Type: {project_details.project_type}
               </div>
             </div>
@@ -210,39 +210,39 @@ const ViewProp = () => {
             <IoStatsChart className="w-5 h-5 text-blue-500" />
             <h4 className="font-semibold text-slate-700 dark:text-slate-300">Project Statistics</h4>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-8 gap-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">{project_statistics.total_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Total Plots</p>
-            </div>
-            <div className="text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="text-center p-1 rounded-lg bg-green-100 dark:bg-green-900">
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">{project_statistics.available_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Available</p>
+              <p className="text-xs text-green-600 dark:text-green-400">Available</p>
             </div>
-            <div className="text-center">
+            <div className="text-center rounded-lg bg-red-100 dark:bg-red-900">
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">{project_statistics.sold_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Sold</p>
+              <p className="text-xs text-red-600 dark:text-red-400">Sold</p>
             </div>
-            <div className="text-center">
+            <div className="text-center rounded-lg bg-blue-100 dark:bg-blue-900">
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{project_statistics.booked_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Booked</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">Booked</p>
             </div>
-            <div className="text-center">
+            <div className="text-center rounded-lg bg-purple-100 dark:bg-purple-900">
               <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{project_statistics.reserved_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Reserved</p>
+              <p className="text-xs text-purple-600 dark:text-purple-400">Reserved</p>
             </div>
-            <div className="text-center">
+            <div className="text-center rounded-lg bg-yellow-100 dark:bg-green-900">
               <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{project_statistics.hold_plots}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">On Hold</p>
+              <p className="text-xs text-yellow-600 dark:text-yellow-400">On Hold</p>
             </div>
-            <div className="text-center">
+            <div className="text-center rounded-lg bg-slate-100 dark:bg-slate-900">
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{project_statistics.total_plots}</p>
+              <p className="text-xs text-slate-800 dark:text-white">Total Plots</p>
+            </div>
+            {/* <div className="text-center">
               <p className="text-lg font-bold text-slate-800 dark:text-white">{formatCurrency(project_statistics.total_value)}</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">Total Value</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-slate-800 dark:text-white">{project_statistics.total_area} sq.ft</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">Total Area</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
