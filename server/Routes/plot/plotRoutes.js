@@ -3,7 +3,7 @@ import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { AddPlotProperty, getAllProjects, getProjectDetails, getProjectPlotById, UpdatePlotProperty } from "../../controller/plot/plotController.js";
+import { AddPlotProperty, getAllProjects, getPlotsFromStatus, getProjectDetails, getProjectPlotById, UpdatePlotProperty } from "../../controller/plot/plotController.js";
 
 
 const router = express.Router();
@@ -26,8 +26,7 @@ const upload = multer({ storage });
 router.post('/AddPlotProperty', upload.single('file'), AddPlotProperty);
 router.get('/getAllProjects',getAllProjects);
 router.get("/getProjectDetails/:project_id", getProjectDetails);
-router.get('/project/:project_id/plot/:plot_sr', getProjectPlotById);
 router.put('/UpdatePlotProperty', UpdatePlotProperty);
-
+router.post("/getPlotsFromStatus",getPlotsFromStatus)
 
 export default router;

@@ -106,7 +106,6 @@ export const loginUser = (req, res) => {
   }
 };
 
-
 export const sendOtp = async (req, res) => {
   try {
     const { mobile } = req.body;

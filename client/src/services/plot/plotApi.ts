@@ -42,8 +42,17 @@ export const getProjectPlotById = async (project_id: number, plot_sr: number) =>
 export const UpdatePlotProperty = async (data: any) => {
   try {
     const response = await axios.put(`${BaseUrl}/plot/UpdatePlotProperty`, data);
-    return response.data;
+    return response;
   } catch (error: any) {
     toast.error(error.response.data.message);
   }
 };
+
+export const getPlotsFromStatus = async (data: any) => {
+  try {
+    const response = await axios.post(`${BaseUrl}/plot/getPlotsFromStatus`, data);
+    return response.data;
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+  }
+}

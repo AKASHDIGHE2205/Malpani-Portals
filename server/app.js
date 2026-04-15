@@ -47,7 +47,6 @@ app.use('/api/post', postRoutes);
 app.use('/api/store', storeRoutes);
 app.use('/api/store/auth', storeauthRoutes);
 app.use('/api/property', propertyRoutes);
-
 app.use('/api/plot', plotRoutes);
 
 app.use('/uploads', express.static('uploads'));

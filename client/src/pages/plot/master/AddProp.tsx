@@ -3,12 +3,10 @@ import CryptoJS from "crypto-js"
 import { useCallback, useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { CiTrash } from "react-icons/ci"
-import { FiSave, FiX } from "react-icons/fi"
 import { IoAddCircleOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import { AddPlotProperty } from "../../../services/plot/plotApi"
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { FiArrowLeft } from "react-icons/fi"
 
 interface Plot {
   id: string
@@ -18,6 +16,7 @@ interface Plot {
   price: string
   survey_no: string
   status: string
+  plot_type: string
   customer_name: string
   book_date: string
   book_amount: string
@@ -27,7 +26,6 @@ interface Plot {
   cX: string
   cY: string
 }
-
 interface PropertyFormData {
   project_name: string
   nick_name: string
@@ -36,6 +34,7 @@ interface PropertyFormData {
   add3: string
   city: string
   pin_code: string
+  area_name: string
   district: string
   state: string
   ext_code: string
@@ -43,9 +42,6 @@ interface PropertyFormData {
   project_type: string
   status: string
 }
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 const STATUS_COLORS: Record<string, string> = {
   O: "#2ECC71",
   H: "#F1C40F",
@@ -58,38 +54,36 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUS_LABELS: Record<string, string> = {
   O: "Open", H: "Hold", B: "Booked", S: "Sold", R: "Reserved", A: "Active", "": "—",
 }
-const MARKER_R = 18 
+
+const MARKER_R = 14
 const VIEWER_H = 560
 
 const generateId = () => Date.now().toString() + Math.random().toString(36).substr(2, 9)
-
-// ─── ImageLayoutViewer ────────────────────────────────────────────────────────
 
 interface ViewerProps {
   src: string
   plots: Plot[]
   onMarkerDrop: (id: string, cX: string, cY: string) => void
-  pendingId: string | null     // badge selected from tray; click-to-place mode
+  pendingId: string | null
   onPlaced: () => void
 }
 
 const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: ViewerProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const imgRef       = useRef<HTMLImageElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
   const [zoom, setZoom] = useState(1)
-  const [pan,  setPan]  = useState({ x: 0, y: 0 })
+  const [pan, setPan] = useState({ x: 0, y: 0 })
   const [loaded, setLoaded] = useState(false)
   const [, tick] = useState(0)
 
-  // refs to avoid stale closures in event handlers
   const zoomRef = useRef(zoom)
-  const panRef  = useRef(pan)
+  const panRef = useRef(pan)
   useEffect(() => { zoomRef.current = zoom }, [zoom])
-  useEffect(() => { panRef.current  = pan  }, [pan])
+  useEffect(() => { panRef.current = pan }, [pan])
 
   // pan drag
   const panDragging = useRef(false)
-  const panAnchor   = useRef({ mx: 0, my: 0, px: 0, py: 0 })
+  const panAnchor = useRef({ mx: 0, my: 0, px: 0, py: 0 })
 
   // marker drag (re-position a placed marker)
   const mDrag = useRef<{ id: string } | null>(null)
@@ -102,8 +96,8 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
     const r = getImgRect()
     if (!r) return null
     return {
-      x: Math.min(100, Math.max(0, ((cx - r.left) / r.width)  * 100)),
-      y: Math.min(100, Math.max(0, ((cy - r.top)  / r.height) * 100)),
+      x: Math.min(100, Math.max(0, ((cx - r.left) / r.width) * 100)),
+      y: Math.min(100, Math.max(0, ((cy - r.top) / r.height) * 100)),
     }
   }, [getImgRect])
 
@@ -113,7 +107,7 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
     if (!ir || !cr) return { left: 0, top: 0 }
     return {
       left: ir.left - cr.left + (pctX / 100) * ir.width,
-      top:  ir.top  - cr.top  + (pctY / 100) * ir.height,
+      top: ir.top - cr.top + (pctY / 100) * ir.height,
     }
   }, [getImgRect])
 
@@ -130,8 +124,8 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
     const maxX = Math.max(0, (iw * z - cw) / 2)
     const maxY = Math.max(0, (ih * z - ch) / 2)
     return {
-      x: Math.min(maxX,  Math.max(-maxX,  p.x)),
-      y: Math.min(maxY,  Math.max(-maxY,  p.y)),
+      x: Math.min(maxX, Math.max(-maxX, p.x)),
+      y: Math.min(maxY, Math.max(-maxY, p.y)),
     }
   }
 
@@ -144,8 +138,8 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
       return next
     })
   }
-  const zoomIn    = () => applyZoom(+0.25)
-  const zoomOut   = () => applyZoom(-0.25)
+  const zoomIn = () => applyZoom(+0.25)
+  const zoomOut = () => applyZoom(-0.25)
   const zoomReset = () => { setZoom(1); setPan({ x: 0, y: 0 }); setTimeout(() => tick(n => n + 1), 50) }
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -225,11 +219,13 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
       }}>
         {/* zoom out */}
         <button type="button" onClick={zoomOut} disabled={zoom <= 1} title="Zoom Out (Ctrl+Scroll)"
-          style={{ width: 30, height: 30, display:"flex", alignItems:"center", justifyContent:"center",
+          style={{
+            width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
             borderRadius: 6, border: "none", background: zoom <= 1 ? "#f1f5f9" : "#e2e8f0",
-            cursor: zoom <= 1 ? "not-allowed" : "pointer", opacity: zoom <= 1 ? 0.45 : 1 }}>
+            cursor: zoom <= 1 ? "not-allowed" : "pointer", opacity: zoom <= 1 ? 0.45 : 1
+          }}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2.5">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M8 11h6"/>
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35M8 11h6" />
           </svg>
         </button>
         <span style={{ fontSize: 12, fontWeight: 600, color: "#475569", minWidth: 40, textAlign: "center" }}>
@@ -237,20 +233,24 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
         </span>
         {/* zoom in */}
         <button type="button" onClick={zoomIn} disabled={zoom >= 4} title="Zoom In (Ctrl+Scroll)"
-          style={{ width: 30, height: 30, display:"flex", alignItems:"center", justifyContent:"center",
+          style={{
+            width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
             borderRadius: 6, border: "none", background: zoom >= 4 ? "#f1f5f9" : "#e2e8f0",
-            cursor: zoom >= 4 ? "not-allowed" : "pointer", opacity: zoom >= 4 ? 0.45 : 1 }}>
+            cursor: zoom >= 4 ? "not-allowed" : "pointer", opacity: zoom >= 4 ? 0.45 : 1
+          }}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2.5">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35M11 8v6M8 11h6" />
           </svg>
         </button>
         {/* reset */}
         <button type="button" onClick={zoomReset} title="Reset View"
-          style={{ width: 30, height: 30, display:"flex", alignItems:"center", justifyContent:"center",
+          style={{
+            width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
             borderRadius: 6, border: "none", background: "#e2e8f0",
-            cursor: "pointer", opacity: zoom === 1 && pan.x === 0 && pan.y === 0 ? 0.35 : 1 }}>
+            cursor: "pointer", opacity: zoom === 1 && pan.x === 0 && pan.y === 0 ? 0.35 : 1
+          }}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2.5">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" />
           </svg>
         </button>
       </div>
@@ -283,8 +283,8 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
           width: "100%", height: VIEWER_H,
           overflow: "hidden", position: "relative",
           cursor: pendingId ? "crosshair"
-                : panDragging.current ? "grabbing"
-                : zoom > 1 ? "grab"
+            : panDragging.current ? "grabbing"
+              : zoom > 1 ? "grab"
                 : "default",
           borderRadius: 12,
         }}
@@ -314,9 +314,9 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
 
         {/* ── markers (NOT inside transform; positioned via imgPctToContainerPx) ── */}
         {loaded && placedPlots.map(plot => {
-          const px    = imgPctToContainerPx(parseFloat(plot.cX), parseFloat(plot.cY))
+          const px = imgPctToContainerPx(parseFloat(plot.cX), parseFloat(plot.cY))
           const color = STATUS_COLORS[plot.status] ?? "#374151"
-          const size  = MARKER_R * 2
+          const size = MARKER_R * 2
 
           return (
             <div
@@ -331,7 +331,7 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
               style={{
                 position: "absolute",
                 left: px.left,
-                top:  px.top,
+                top: px.top,
                 transform: "translate(-50%, -50%)",
                 zIndex: 30,
                 cursor: "grab",
@@ -351,15 +351,6 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
               }}>
                 {String(plot.plot_no).slice(0, 4)}
               </div>
-              <div style={{
-                position: "absolute", top: "100%", left: "50%",
-                transform: "translateX(-50%)", marginTop: 2,
-                background: "rgba(0,0,0,0.72)", color: "#fff",
-                fontSize: 9, borderRadius: 4, padding: "1px 5px",
-                whiteSpace: "nowrap", pointerEvents: "none",
-              }}>
-                {plot.plot_no}
-              </div>
             </div>
           )
         })}
@@ -368,22 +359,21 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
   )
 }
 
-// ─── Main AddProp ─────────────────────────────────────────────────────────────
+//Main AddProp
 
 const AddProp = () => {
   const [propertyData, setPropertyData] = useState<PropertyFormData>({
     project_name: "", nick_name: "", add1: "", add2: "", add3: "",
-    city: "", pin_code: "", district: "", state: "",
+    city: "", pin_code: "", area_name: "", district: "", state: "",
     ext_code: "", geo_location: "", project_type: "", status: "A",
   })
-  const [plots, setPlots]               = useState<Plot[]>([])
+  const [plots, setPlots] = useState<Plot[]>([])
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl]     = useState<string | null>(null)
-  const [fileType, setFileType]         = useState<"image" | "pdf" | null>(null)
-  const [pendingId, setPendingId]       = useState<string | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [fileType, setFileType] = useState<"image" | "pdf" | null>(null)
+  const [pendingId, setPendingId] = useState<string | null>(null)
   const navigate = useNavigate()
-
-  const secretKey = "Malpani@2025"
+  const secretKey = "Malpani@2025";
   const dcryptdata = (enc: string, key: string) => {
     try {
       const b = CryptoJS.AES.decrypt(enc, key)
@@ -399,13 +389,13 @@ const AddProp = () => {
 
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
-  // ── plots ──────────────────────────────────────────────────────────────────
+  // plots
 
   const handleAddPlot = () =>
     setPlots(prev => [...prev, {
       id: generateId(), plot_sr: (prev.length + 1).toString(),
       plot_no: "", area: "", price: "", survey_no: "",
-      status: "O", customer_name: "", book_date: "", book_amount: "",
+      status: "O", plot_type: "plot", customer_name: "", book_date: "", book_amount: "",
       sold_date: "", sold_amount: "", vc_remarks: "", cX: "", cY: "",
     }])
 
@@ -413,18 +403,15 @@ const AddProp = () => {
     setPlots(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p))
 
   const handleDeletePlot = (id: string) => {
-    if (!window.confirm("Delete this plot?")) return
+    if (!window.confirm("Are you sure you want to delete this plot?")) return
     setPlots(prev => prev.filter(p => p.id !== id))
     if (pendingId === id) setPendingId(null)
   }
 
-  const handleResetMarker = (id: string) =>
-    setPlots(prev => prev.map(p => p.id === id ? { ...p, cX: "", cY: "" } : p))
+  const handleResetMarker = (id: string) => setPlots(prev => prev.map(p => p.id === id ? { ...p, cX: "", cY: "" } : p))
+  const handleMarkerDrop = (id: string, cX: string, cY: string) => setPlots(prev => prev.map(p => p.id === id ? { ...p, cX, cY } : p))
 
-  const handleMarkerDrop = (id: string, cX: string, cY: string) =>
-    setPlots(prev => prev.map(p => p.id === id ? { ...p, cX, cY } : p))
-
-  // ── file ───────────────────────────────────────────────────────────────────
+  // file 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]; if (!f) return
@@ -433,15 +420,14 @@ const AddProp = () => {
     setFileType(f.type === "application/pdf" ? "pdf" : "image")
   }
 
-  // ── form ───────────────────────────────────────────────────────────────────
-
+  // form
   const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setPropertyData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleCancel = () => {
-    setPropertyData({ project_name:"",nick_name:"",add1:"",add2:"",add3:"",city:"",pin_code:"",district:"",state:"",ext_code:"",geo_location:"",project_type:"",status:"A" })
+    setPropertyData({ project_name: "", nick_name: "", add1: "", add2: "", add3: "", city: "", pin_code: "", area_name: "", district: "", state: "", ext_code: "", geo_location: "", project_type: "", status: "A" })
     setPlots([]); setSelectedFile(null); setPreviewUrl(null); setFileType(null); setPendingId(null)
     navigate("/plot/master/plot-view")
   }
@@ -465,14 +451,26 @@ const AddProp = () => {
   }
 
   const unplacedPlots = plots.filter(p => p.cX === "" || p.cY === "")
-  const placedPlots   = plots.filter(p => p.cX !== "" && p.cY !== "")
+  const placedPlots = plots.filter(p => p.cX !== "" && p.cY !== "")
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
       <div className="max-w-7xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
 
         <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-          <h1 className="text-2xl font-bold text-center text-slate-800 dark:text-white">Add New Property</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
+              Add Property
+            </h1>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+            >
+              <FiArrowLeft className="w-4 h-4" />
+              Back to Projects
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -510,20 +508,106 @@ const AddProp = () => {
               <div className="lg:col-span-3">
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Address Information</h2>
               </div>
-              {(["add1","add2","add3"] as const).map((f,i) => (
-                <div key={f}>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Address {i+1}</label>
-                  <input type="text" name={f} value={propertyData[f]} onChange={handlePropertyChange}
-                    className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-              ))}
-              {([["city","City",true],["district","District",false],["state","State",true],["pin_code","PIN Code",false]] as [string,string,boolean][]).map(([name,label,req]) => (
-                <div key={name}>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{label} {req && <span className="text-red-500">*</span>}</label>
-                  <input type="text" name={name} value={(propertyData as any)[name]} onChange={handlePropertyChange} required={req}
-                    className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-              ))}
+              {/* Address Line 1 */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Address 1</label>
+                <input
+                  type="text"
+                  name="add1"
+                  value={propertyData.add1}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Address Line 2 */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Address 2</label>
+                <input
+                  type="text"
+                  name="add2"
+                  value={propertyData.add2}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Address Line 3 */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Address 3</label>
+                <input
+                  type="text"
+                  name="add3"
+                  value={propertyData.add3}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              {/* City */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  City <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  value={propertyData.city}
+                  onChange={handlePropertyChange}
+                  required
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* District */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">District</label>
+                <input
+                  type="text"
+                  name="district"
+                  value={propertyData.district}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* State */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  State <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="state"
+                  value={propertyData.state}
+                  onChange={handlePropertyChange}
+                  required
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* PIN Code */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">PIN Code</label>
+                <input
+                  type="text"
+                  name="pin_code"
+                  value={propertyData.pin_code}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Area */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Area</label>
+                <input
+                  type="number"
+                  name="area_name"
+                  value={propertyData.area_name}
+                  onChange={handlePropertyChange}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
 
               <div className="lg:col-span-3">
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h2>
@@ -546,6 +630,7 @@ const AddProp = () => {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Upload Layout</label>
                 <input type="file" name="file" accept="image/*,application/pdf" onChange={handleFileChange}
                   className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                <p className="text-xs text-slate-500 mt-1">Supported formats: SVG, JPG, PNG</p>{/*PDF*/}
               </div>
             </div>
           </div>
@@ -565,7 +650,8 @@ const AddProp = () => {
                 <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
                   <thead className="bg-slate-100 dark:bg-slate-700">
                     <tr>
-                      {["SR","Plot No *","Area * (sq.ft)","Price","Survey No","Status","Remark","Position","Actions"].map(h => (
+                      {/* "Status", this column is after th Type column */}
+                      {["SR", "Plot No *", "Area * (sq.ft)", "Price", "Survey No", "Type", "Remark", "Position", "Actions"].map(h => (
                         <th key={h} className="px-3 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -574,16 +660,24 @@ const AddProp = () => {
                     {plots.map(plot => (
                       <tr key={plot.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                         <td className="px-3 py-1.5 text-sm text-slate-900 dark:text-slate-200">{plot.plot_sr}</td>
-                        <td className="px-3 py-1.5"><input type="text" value={plot.plot_no} onChange={e=>handleUpdatePlot(plot.id,"plot_no",e.target.value)}
-                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Plot No"/></td>
-                        <td className="px-3 py-1.5"><input type="number" value={plot.area} onChange={e=>handleUpdatePlot(plot.id,"area",e.target.value)}
-                          className="w-28 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Area"/></td>
-                        <td className="px-3 py-1.5"><input type="number" value={plot.price} onChange={e=>handleUpdatePlot(plot.id,"price",e.target.value)}
-                          className="w-32 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Price"/></td>
-                        <td className="px-3 py-1.5"><input type="text" value={plot.survey_no} onChange={e=>handleUpdatePlot(plot.id,"survey_no",e.target.value)}
-                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Survey No"/></td>
+                        <td className="px-3 py-1.5"><input type="text" value={plot.plot_no} onChange={e => handleUpdatePlot(plot.id, "plot_no", e.target.value)}
+                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Plot No" /></td>
+                        <td className="px-3 py-1.5"><input type="number" value={plot.area} onChange={e => handleUpdatePlot(plot.id, "area", e.target.value)}
+                          className="w-28 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Area" /></td>
+                        <td className="px-3 py-1.5"><input type="number" value={plot.price} onChange={e => handleUpdatePlot(plot.id, "price", e.target.value)}
+                          className="w-32 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Price" /></td>
+                        <td className="px-3 py-1.5"><input type="text" value={plot.survey_no} onChange={e => handleUpdatePlot(plot.id, "survey_no", e.target.value)}
+                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Survey No" /></td>
                         <td className="px-3 py-1.5">
-                          <select value={plot.status} onChange={e=>handleUpdatePlot(plot.id,"status",e.target.value)}
+                          <select value={plot.plot_type} onChange={e => handleUpdatePlot(plot.id, "plot_type", e.target.value)}
+                            className="w-32 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm">
+                            <option value="plot">Plot</option>
+                            <option value="open_space">Open Space</option>
+                            <option value="amenity">Amenity Plot</option>
+                          </select>
+                        </td>
+                        {/* <td className="px-3 py-1.5">
+                          <select value={plot.status} onChange={e => handleUpdatePlot(plot.id, "status", e.target.value)}
                             className="w-28 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm">
                             <option value="">Select</option>
                             <option value="O">Open</option>
@@ -592,22 +686,22 @@ const AddProp = () => {
                             <option value="S">Sold</option>
                             <option value="R">Reserved</option>
                           </select>
-                        </td>
-                        <td className="px-3 py-1.5"><input type="text" value={plot.vc_remarks} onChange={e=>handleUpdatePlot(plot.id,"vc_remarks",e.target.value)}
-                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Remark"/></td>
+                        </td> */}
+                        <td className="px-3 py-1.5"><input type="text" value={plot.vc_remarks} onChange={e => handleUpdatePlot(plot.id, "vc_remarks", e.target.value)}
+                          className="w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Remark" /></td>
                         <td className="px-3 py-1.5 text-xs whitespace-nowrap">
                           {plot.cX && plot.cY ? (
                             <span className="flex items-center gap-1 text-green-600 font-medium">
-                              <span className="w-2 h-2 rounded-full" style={{backgroundColor: STATUS_COLORS[plot.status]??"#374151"}}/>
+                              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[plot.status] ?? "#374151" }} />
                               Placed
-                              <button type="button" onClick={()=>handleResetMarker(plot.id)} className="ml-1 text-red-400 hover:text-red-600 underline">Reset</button>
+                              <button type="button" onClick={() => handleResetMarker(plot.id)} className="ml-1 text-red-400 hover:text-red-600 underline">Reset</button>
                             </span>
                           ) : <span className="text-amber-500">Not placed</span>}
                         </td>
                         <td className="px-3 py-1.5">
-                          <button type="button" onClick={()=>handleDeletePlot(plot.id)}
+                          <button type="button" onClick={() => handleDeletePlot(plot.id)}
                             className="p-1.5 rounded-md bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all">
-                            <CiTrash className="h-5 w-5"/>
+                            <CiTrash className="h-5 w-5" />
                           </button>
                         </td>
                       </tr>
@@ -624,12 +718,12 @@ const AddProp = () => {
           </div>
 
           {/* Section 3 — Interactive Placement (image only) */}
-          {previewUrl && plots.length > 0 && fileType === "image" && (
+          {previewUrl && fileType === "image" && (
             <div className="p-6 border-t border-slate-200 dark:border-slate-700">
               <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
                 Plot Placement on Layout
               </h2>
-              <p className="text-sm text-red-600 dark:text-red-400 mb-4">
+              <p className="text-sm text-slate-600 dark:text-red-400 mb-4">
                 Click a badge → then click its location on the image. Placed markers can be dragged to reposition.
                 Use zoom/pan to work on detailed areas — marker positions are always saved relative to the image, not the screen.
               </p>
@@ -642,7 +736,7 @@ const AddProp = () => {
                   </p>
                   <div className="flex flex-wrap gap-3">
                     {unplacedPlots.map(plot => {
-                      const color  = STATUS_COLORS[plot.status] ?? "#374151"
+                      const color = STATUS_COLORS[plot.status] ?? "#374151"
                       const active = pendingId === plot.id
                       return (
                         <button key={plot.id} type="button"
@@ -679,7 +773,7 @@ const AddProp = () => {
               <div className="mt-3 flex flex-wrap gap-3">
                 {Object.entries(STATUS_COLORS).filter(([k]) => k !== "" && k !== "A").map(([code, color]) => (
                   <div key={code} className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-                    <span className="w-3 h-3 rounded-full" style={{backgroundColor: color}}/>
+                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
                     {STATUS_LABELS[code]}
                   </div>
                 ))}
@@ -687,7 +781,7 @@ const AddProp = () => {
               <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
                 <div className="flex-1 bg-slate-200 rounded-full h-2 overflow-hidden">
                   <div className="h-2 rounded-full bg-green-500 transition-all duration-500"
-                    style={{width: plots.length > 0 ? `${Math.round((placedPlots.length/plots.length)*100)}%` : "0%"}}/>
+                    style={{ width: plots.length > 0 ? `${Math.round((placedPlots.length / plots.length) * 100)}%` : "0%" }} />
                 </div>
                 <span className="font-medium whitespace-nowrap">{placedPlots.length}/{plots.length} placed</span>
               </div>
@@ -698,7 +792,7 @@ const AddProp = () => {
           {previewUrl && fileType === "pdf" && (
             <div className="p-6 border-t border-slate-200 dark:border-slate-700">
               <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Layout Preview (PDF)</h2>
-              <iframe src={`${previewUrl}#toolbar=0&navpanes=0`} title="Layout PDF" className="w-full rounded-xl border border-slate-200" style={{height: 600, border: "none"}}/>
+              <iframe src={`${previewUrl}#toolbar=0&navpanes=0`} title="Layout PDF" className="w-full rounded-xl border border-slate-200" style={{ height: 600, border: "none" }} />
               <p className="mt-2 text-xs text-slate-400">Marker placement is only available for image layouts. Upload a JPG/PNG for interactive placement.</p>
             </div>
           )}
@@ -707,11 +801,11 @@ const AddProp = () => {
           <div className="p-6 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-3">
             <button type="button" onClick={handleCancel}
               className="flex items-center gap-2 px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
-              <FiX size={18}/> Cancel
+              Cancel
             </button>
             <button type="submit"
               className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg">
-              <FiSave size={18}/> Save Property
+              Submit
             </button>
           </div>
         </form>

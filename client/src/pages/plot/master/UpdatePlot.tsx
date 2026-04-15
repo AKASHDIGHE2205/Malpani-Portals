@@ -113,7 +113,7 @@ const UpdatePlot = () => {
       };
       const response = await UpdatePlotProperty(payload);
       if (response) {
-        toast.success(response?.message || "Plot updated successfully");
+        toast.success("Plot updated successfully");
         navigate('/plot/master/plot-view');
       }
     } catch (error) {
