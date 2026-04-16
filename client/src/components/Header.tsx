@@ -1,6 +1,6 @@
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import Logo from '../assets/malpani3.png';
+// import Logo from '../assets/malpani3.png';
 import CryptoJS from "crypto-js";
 import { FaRegUser } from "react-icons/fa";
 
@@ -39,7 +39,7 @@ const Header = () => {
         <nav className="px-2 sm:px- flex basis-full items-center w-full mx-auto">
           <div className="me-5 lg:me-0 lg:hidden">
             {/* <!-- Logo --> */}
-            <Link
+            {/* <Link
 
               className="hidden flex-none text-black rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
               to="/"
@@ -47,7 +47,7 @@ const Header = () => {
               <div className="flex -mt-1 items-center gap-x-1">
                 <img src={Logo} alt="logo" className="w-32 h-16" />
               </div>
-            </Link>
+            </Link> */}
             {/* <!-- End Logo --> */}
             <button
               type="button"
@@ -132,7 +132,7 @@ const Header = () => {
 
             <div className="flex flex-row items-center justify-end gap-1">
 
-              <button
+              {/* <button
                 type="button"
                 className="hidden size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-slate-800 hover:bg-slate-100 focus:outline-none focus:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-slate-700 dark:focus:bg-slate-700"
               >
@@ -152,28 +152,8 @@ const Header = () => {
                   <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                 </svg>
                 <span className="sr-only">Notifications</span>
-              </button>
+              </button> */}
 
-              <button
-                type="button"
-                className="hidden size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-slate-800 hover:bg-slate-100 focus:outline-none focus:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-slate-700 dark:focus:bg-slate-700"
-              >
-                <svg
-                  className="shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
-                <span className="sr-only">Activity</span>
-              </button>
 
               <button type="button" className="hs-dark-mode-active:hidden block hs-dark-mode font-medium text-slate-800 rounded-full bg-slate-100 hover:bg-slate-200 focus:outline-none focus:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-900 dark:focus:bg-slate-900" data-hs-theme-click-value="dark">
                 <span className="group inline-flex shrink-0 justify-center items-center size-9">

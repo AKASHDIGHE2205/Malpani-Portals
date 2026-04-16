@@ -41,7 +41,7 @@ const shapePlot = (p) => ({
   price: p.price,
   survey_no: p.survey_no,
   status: p.status,
-  plot_type : p.plot_type,
+  plot_type: p.plot_type,
   status_text: toStatusText(p.status),
   customer_name: p.customer_name,
   reference_by: p.reference_by,
@@ -451,6 +451,54 @@ export const UpdatePlotProperty = (req, res) => {
       }
 
       res.status(200).json({ message: "Plot updated successfully", data: result });
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const updatePlotMaster = (req, res) => {
+  try {
+    const { project_id, project_name, nick_name, add1, add2, add3, city, pin_code, area, district, state, ext_code, project_type, status
+    } = req.body;
+
+    const sql = `
+      UPDATE xx_project_master SET
+        project_name = ?,
+        nick_name = ?,
+        add1 = ?,
+        add2 = ?,
+        add3 = ?,
+        city = ?,
+        pin_code = ?,
+        area = ?,
+        district = ?,
+        state = ?,
+        ext_code = ?,
+        project_type = ?,
+        status = ?
+      WHERE project_id = ?
+    `;
+
+    db.query(sql, [
+      project_name, nick_name, add1, add2, add3,
+      city, pin_code, area, district, state,
+      ext_code, project_type, status, project_id
+    ], (err, results) => {
+      if (err) {
+        return res.status(400).json({ message: "Error updating project details." });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Project not found." });
+      }
+
+      res.status(200).json({
+        code: 200,
+        status: true,
+        message: "Project details updated successfully."
+      });
     });
 
   } catch (error) {

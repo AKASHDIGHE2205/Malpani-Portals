@@ -29,7 +29,7 @@ export const authenticateToken = (req, res, next) => {
       if (err) {
         return res.status(401).json({
           success: false,
-          message: "Unauthorized: Invalid or expired token"
+          message: "Unauthorized access: Your session token is invalid or has expired. Please log in again."
         });
       }
 

@@ -2,8 +2,7 @@ import db from '../../db.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
-
-const SECRET_KEY = "your_secret_key";//Malpani@2025
+import {SECRET_KEY}  from "../../config/env.js";
 
 // REGISTER USER  
 export const registerUser = async (req, res) => {

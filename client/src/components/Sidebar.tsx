@@ -59,7 +59,7 @@ const navigationConfig: NavItem[] = [
     id: "store",
     label: "Store",
     icon: <VscFileSubmodule className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') && 
+    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
       (user.user.role === 'Master' || user.user.role === 'User')),
     children: [
       {
@@ -100,7 +100,7 @@ const navigationConfig: NavItem[] = [
     id: "property",
     label: "Property",
     icon: <BsBuildings className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') && 
+    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
       (user.user.role === 'Master' || user.user.role === 'User')),
     children: [
       {
@@ -143,15 +143,17 @@ const navigationConfig: NavItem[] = [
         <path d="M15 3v18" /><path d="M3 12h18" /><path d="M9 3v18" /><rect x="3" y="3" width="18" height="18" rx="2" />
       </svg>
     ),
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') && 
+    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
       (user.user.role === 'Master' || user.user.role === 'User')),
     children: [
       { id: "plot-dashboard", label: "Dashboard", path: "/plot/dashboard", icon: <VscGraph className="w-3.5 h-3.5" /> },
-      { id: "plot-master", label: "Plot Master", path: "/plot/master/plot-view", icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /><circle cx="12" cy="12" r="3" />
-        </svg>
-      ) },
+      {
+        id: "plot-master", label: "Plot Master", path: "/plot/master/plot-view", icon: (
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /><circle cx="12" cy="12" r="3" />
+          </svg>
+        )
+      },
       // { id: "view-layout", label: "View Layout", path: "/plot/master/consignee", icon: <LuInbox className="w-3.5 h-3.5" /> },
     ],
   },
@@ -159,7 +161,7 @@ const navigationConfig: NavItem[] = [
     id: "post",
     label: "POST",
     icon: <FaFileAlt className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Post') && 
+    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Post') &&
       (user.user.role === 'Master' || user.user.role === 'User')),
     children: [
       {
@@ -194,14 +196,14 @@ const navigationConfig: NavItem[] = [
     id: "super-shoppe",
     label: "Super Shoppe",
     icon: <FaStore className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') && 
+    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
       (user.user.role === 'Master' || user.user.role === 'Admin' || user.user.role === 'Manager')),
     children: [
       {
         id: "shoppe-master",
         label: "Master",
         icon: <MdLeaderboard className="w-4 h-4" />,
-        permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') && 
+        permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
           (user.user.role === 'Master' || user.user.role === 'Admin')),
         children: [
           { id: "faq", label: "FAQ", path: "/sargam/master/faq-view", icon: <FaQuestionCircle className="w-3.5 h-3.5" /> },
@@ -214,20 +216,20 @@ const navigationConfig: NavItem[] = [
         label: "Transactions",
         icon: <GrTransaction className="w-4 h-4" />,
         children: [
-          { 
-            id: "admin-faq", 
-            label: "Admin FAQ", 
-            path: "/saragam/master/admin-faq", 
+          {
+            id: "admin-faq",
+            label: "Admin FAQ",
+            path: "/saragam/master/admin-faq",
             icon: <FaUserShield className="w-3.5 h-3.5" />,
-            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') && 
+            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
               (user.user.role === 'Master' || user.user.role === 'Admin'))
           },
-          { 
-            id: "manager-faq", 
-            label: "Manager FAQ", 
-            path: "/saragam/master/manager-faq", 
+          {
+            id: "manager-faq",
+            label: "Manager FAQ",
+            path: "/saragam/master/manager-faq",
             icon: <FaUserTie className="w-3.5 h-3.5" />,
-            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') && 
+            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
               (user.user.role === 'Master' || user.user.role === 'Admin' || user.user.role === 'Manager'))
           },
         ],
@@ -237,20 +239,20 @@ const navigationConfig: NavItem[] = [
 ];
 
 // Recursive component to render nav items
-const NavItemRenderer = ({ 
-  item, 
-  user, 
+const NavItemRenderer = ({
+  item,
+  user,
   onNavigate,
-  depth = 0 
-}: { 
-  item: NavItem; 
-  user: User | null; 
+  depth = 0
+}: {
+  item: NavItem;
+  user: User | null;
   onNavigate: () => void;
   depth?: number;
 }) => {
   // Check if item is hidden
   if (item.hidden) return null;
-  
+
   // Check permission
   const hasPermission = checkPermission(item.permission, user);
   if (!hasPermission) return null;
@@ -262,11 +264,10 @@ const NavItemRenderer = ({
     return (
       <li>
         <NavLink
-          className={({ isActive }) => 
-            `flex items-center gap-x-2 py-2 px-3 text-sm font-medium rounded-lg transition-colors ${
-              isActive
-                ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-100"
-                : "text-slate-700 hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-700/50"
+          className={({ isActive }) =>
+            `flex items-center gap-x-2 py-2 px-3 text-sm font-medium rounded-lg transition-colors ${isActive
+              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-100"
+              : "text-slate-700 hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-700/50"
             }`
           }
           to={item.path}
@@ -330,10 +331,10 @@ const NavItemRenderer = ({
       >
         <ul className="pt-2 ps-2 space-y-1">
           {item.children?.map((child) => (
-            <NavItemRenderer 
-              key={child.id} 
-              item={child} 
-              user={user} 
+            <NavItemRenderer
+              key={child.id}
+              item={child}
+              user={user}
               onNavigate={onNavigate}
               depth={depth + 1}
             />
@@ -390,7 +391,7 @@ const Sidebar = () => {
   };
 
   // Filter navigation items based on user permissions
-  const visibleNavItems = navigationConfig.filter(item => 
+  const visibleNavItems = navigationConfig.filter(item =>
     !item.hidden && checkPermission(item.permission, user)
   );
 
@@ -415,8 +416,8 @@ const Sidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <img src={Logo} alt="logo" className="w-10 h-10" />
-                <span className="text-xl font-bold text-[#e20f0f] dark:text-white flex flex-col">
-                  Malpani<br />Group
+                <span className="text-xl font-bold text-[#e20f0f] hover:text-[#cc0000] dark:text-white flex flex-col">
+                  Malpani <br /> Group
                 </span>
               </div>
             </Link>
@@ -427,10 +428,10 @@ const Sidebar = () => {
             <nav className="hs-accordion-group px-4 py-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
               <ul className="flex flex-col space-y-2">
                 {visibleNavItems.map((item) => (
-                  <NavItemRenderer 
-                    key={item.id} 
-                    item={item} 
-                    user={user} 
+                  <NavItemRenderer
+                    key={item.id}
+                    item={item}
+                    user={user}
                     onNavigate={handleNavigate}
                   />
                 ))}

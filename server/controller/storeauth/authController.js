@@ -2,7 +2,7 @@ import db from '../../db.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-const SECRET_KEY = "your_secret_key";
+import {SECRET_KEY} from "../../config/env.js"
 
 // REGISTER USER
 export const registerUser = async (req, res) => {

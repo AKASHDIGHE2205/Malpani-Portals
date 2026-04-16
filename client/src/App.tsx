@@ -10,11 +10,10 @@ import DefaultLayout from './layout/DefaultLayout';
 import { RootState } from './store/store';
 
 import ForgotPassword from "./pages/authentication/ForgotPassword";
-import PlotDashboard from './pages/plot/Dashboard/PlotDashboard';
-import AddProp from './pages/plot/master/AddProp';
-import EditProp from './pages/plot/master/EditProp';
-import UpdatePlot from './pages/plot/master/UpdatePlot';
-import ViewProp from "./pages/plot/master/ViewProp";
+const PlotDashboard = lazy(() => import('./pages/plot/Dashboard/PlotDashboard'));
+const AddProp = lazy(() => import('./pages/plot/master/AddProp'));
+const EditProp = lazy(() => import('./pages/plot/master/EditProp'));
+const ViewProp = lazy(() => import('./pages/plot/master/ViewProp'));
 const Home = lazy(() => import('./pages/home/Home'));
 const Entries = lazy(() => import('./pages/Stores/transaction/Entries/Entries'));
 const CompanyView = lazy(() => import('./pages/Stores/master/Company/CompanyView'));
@@ -125,8 +124,7 @@ function MainApp() {
             <Route path="property/transaction/tran-view" element={<TranView />} />
             <Route path="property/transaction/create" element={<TranNewEntry />} />
             <Route path="property/sale-view" element={<SaleProView />} />
-            <Route path="property/sale-entry" element={<SaleNewEntry />} />
-
+            <Route path="property/sale-entry" element={<SaleNewEntry />} />       
 
 
             {/*Property Report  Routes */}
@@ -154,11 +152,10 @@ function MainApp() {
             <Route path="saragam/master/manager-faq" element={<ManagerFAQ />} />
 
             {/*Plot Routes */}
-            <Route path="plot/master/plot-view" element={<ViewProp/>}/>
-            <Route path="plot/master/plot-edit" element={<EditProp/>}/>
-            <Route path="plot/master/add-plot" element={<AddProp/>}/>
-            <Route path="plot/master/update-plot" element={<UpdatePlot/>}/>
-            <Route path="plot/dashboard" element={<PlotDashboard/>}/>
+            <Route path="plot/master/plot-view" element={<ViewProp />} />
+            <Route path="plot/master/plot-edit" element={<EditProp />} />
+            <Route path="plot/master/add-plot" element={<AddProp />} />
+            <Route path="plot/dashboard" element={<PlotDashboard />} />
 
           </Route>
 

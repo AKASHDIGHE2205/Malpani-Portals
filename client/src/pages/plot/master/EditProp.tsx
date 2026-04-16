@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { getProjectDeatils } from "../../../services/plot/plotApi";
+import { getProjectDeatils, updatePlotMaster } from "../../../services/plot/plotApi";
 import { BsEye } from "react-icons/bs";
 import EditPlot from "./EditPlot";
 
@@ -70,7 +70,6 @@ interface ProjectResponse {
   plots: any[];
 }
 
-export type Status = 'O' | 'S' | 'B' | 'R' | 'H';
 export const statusStyles: Record<Status, string> = {
   O: "border-green-400 text-green-600",
   S: "border-red-400 text-red-600",
@@ -78,8 +77,8 @@ export const statusStyles: Record<Status, string> = {
   R: "border-purple-400 text-purple-600",
   H: "border-yellow-400 text-yellow-600",
 };
+export type Status = 'O' | 'S' | 'B' | 'R' | 'H';
 
-// Main EditProp Component
 const EditProp = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -176,7 +175,6 @@ const EditProp = () => {
     fetchProjectData();
   }, [propId]);
 
-  // Form handlers
   const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     if (!isEditMode) return;
     const { name, value } = e.target;
@@ -185,6 +183,22 @@ const EditProp = () => {
 
   const handleCancel = () => {
     navigate("/plot/master/plot-view");
+    setPropertyData({
+      project_name: "",
+      nick_name: "",
+      add1: "",
+      add2: "",
+      add3: "",
+      city: "",
+      pin_code: "",
+      area: "",
+      district: "",
+      state: "",
+      ext_code: "",
+      geo_location: "",
+      project_type: "",
+      status: "A",
+    });
   };
 
   const handleEdit = (plot: Plot,) => {
@@ -201,6 +215,7 @@ const EditProp = () => {
 
   const handleSubmit = async () => {
     const body = {
+      project_id: propId,
       project_name: propertyData.project_name,
       nick_name: propertyData.nick_name,
       add1: propertyData.add1,
@@ -215,9 +230,12 @@ const EditProp = () => {
       geo_location: propertyData.geo_location,
       project_type: propertyData.project_type,
       status: propertyData.status,
+    } 
+    const response = await updatePlotMaster(body);
+    if (response.code === 200) {
+      toast.success(response.message || "Project details updated successfully.");
+      handleCancel();
     }
-    console.log(body);
-
   }
 
   if (loading) {
@@ -394,7 +412,7 @@ const EditProp = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Area</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Total Area</label>
               <input
                 type="text"
                 name="area"
@@ -449,7 +467,7 @@ const EditProp = () => {
               <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
                 <thead className="bg-slate-100 dark:bg-slate-700">
                   <tr>
-                    {["SR", "Plot No *", "Area * (sq.ft)", "Price", "Survey No", "Type", "Status", "Remark", ...(isEditMode ? ["Actions"] : [])].map(h => (
+                    {["SR", "Plot No *", "Area * (sq.ft)", "Price", "Survey No", "Type", "Status", "Remark", "Actions"].map(h => (
                       <th key={h} className="px-3 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -529,15 +547,15 @@ const EditProp = () => {
                           placeholder="Remark"
                         />
                       </td>
-                      {isEditMode && (
-                        <td className="px-3 py-1.5 flex justify-center gap-1">
-                          <button
-                            type="button"
-                            className="p-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all"
-                            onClick={() => { handleView(plot) }}
-                          >
-                            <BsEye className="h-5 w-5" />
-                          </button>
+                      <td className="px-3 py-1.5 flex justify-center gap-1">
+                        <button
+                          type="button"
+                          className="p-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all"
+                          onClick={() => { handleView(plot) }}
+                        >
+                          <BsEye className="h-5 w-5" />
+                        </button>
+                        {isEditMode && (
                           <button
                             type="button"
                             className="p-1.5 rounded-md bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-all"
@@ -545,8 +563,8 @@ const EditProp = () => {
                           >
                             <CiEdit className="w-6 h-6" />
                           </button>
-                        </td>
-                      )}
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

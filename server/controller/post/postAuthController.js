@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import db from "../../db.js";
-
-const SECRET_KEY = "My_Strong_secret_key";
+import {SECRET_KEY} from "../../config/env.js"
 const SALT_ROUNDS = 10;
 
 // ✅ Generate JWT Token

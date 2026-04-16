@@ -2,9 +2,11 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { ElementType, useCallback, useEffect, useRef, useState, useDeferredValue } from 'react';
 import {
-  MdOutlineCheckCircle, MdOutlineLock, MdOutlineAccessTime, MdOutlineInfo, MdOutlineWarning, MdHelpOutline, MdOutlineLayers, MdKeyboardArrowDown, MdRotateRight, MdZoomOut, MdZoomIn, MdPauseCircle, MdOutlineLan
+  MdOutlineCheckCircle, MdOutlineLock, MdOutlineAccessTime, MdOutlineInfo, MdOutlineWarning, MdHelpOutline, MdOutlineLayers, MdKeyboardArrowDown, MdRotateRight, MdZoomOut, MdZoomIn, MdPauseCircle, MdOutlineLan,
 } from 'react-icons/md';
+// MdOutlineZoomOutMap, MdOutlineZoomInMap, MdOutlineDescription
 import { FaRegFileAlt, FaRegStopCircle } from 'react-icons/fa';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { imgPath } from '../../../constant/BaseUrl';
 import { getAllProjects, getPlotsFromStatus, getProjectDeatils } from '../../../services/plot/plotApi';
 import { ProjectResponse } from '../master/ViewProp';
@@ -25,7 +27,14 @@ const STATUS_ICONS: Record<PlotStatus, ElementType> = {
   B: MdOutlineAccessTime,
   R: MdOutlineInfo,
   H: MdOutlineWarning,
-  U: MdHelpOutline
+  U: MdHelpOutline,
+};
+const STATUS_CONFIG = {
+  O: { label: 'Open', color: STATUS_COLORS.O },
+  S: { label: 'Sold', color: STATUS_COLORS.S },
+  B: { label: 'Booked', color: STATUS_COLORS.B },
+  R: { label: 'Reserved', color: STATUS_COLORS.R },
+  H: { label: 'Hold', color: STATUS_COLORS.H },
 };
 
 const VIEWER_H = 600;
@@ -303,6 +312,7 @@ const PlotDashboard = () => {
   const [plotStatus, setPlotStatus] = useState('O');
   const [plotDetails, setPlotDetails] = useState<any[]>([]);
   const [plotsLoading, setPlotsLoading] = useState(false);
+  // const [isLayoutExpanded, setIsLayoutExpanded] = useState(true);
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -354,12 +364,19 @@ const PlotDashboard = () => {
   // derived data
   const { project_details, project_statistics, plots } = projectDetails ?? {};
 
+  const statusData = Object.entries(STATUS_CONFIG).map(([key, cfg]) => ({
+    name: cfg.label,
+    value: plots?.filter((p: any) => p.status === key).length ?? 0,
+    color: cfg.color,
+  }));
+
   const filteredPlots = plotDetails.filter((p: any) =>
     Object.values(p).some(v => String(v).toLowerCase().includes(deferredSearch.toLowerCase()))
   );
 
   const fileUrl = project_details?.file_path ? `${imgPath}/${project_details.file_path}` : null;
   const fileType = fileUrl ? getFileType(project_details.file_path) : null;
+  // const placedCount = plots?.filter((p: any) => p.cX != null && p.cX !== '' && p.cY != null && p.cY !== '').length ?? 0;
 
   // Global spinner only on initial project list load
   if (projectsLoading && !projects.length) return (
@@ -501,6 +518,45 @@ const PlotDashboard = () => {
             )} */}
           </motion.div>
         </section>
+
+        {/* ── Status legend & pie chart ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 ">
+          <div className="p-8 rounded-lg shadow-2xl">
+            <h3 className="text-lg font-semibold mb-6">Plot Status</h3>
+            <div className="flex flex-col gap-3">
+              {Object.entries(STATUS_COLORS).filter(([k]) => k !== 'U').map(([code, color]) => (
+                <div key={code} className="flex items-center gap-3 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+                  <span className="text-sm font-semibold text-slate-700">{STATUS_LABELS[code]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-4 rounded-lg shadow-2xl">
+            <h3 className="text-lg font-semibold mb-4">Status Distribution</h3>
+            {detailsLoading ? (
+              <div className="flex items-center justify-center" style={{ height: 320 }}>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500" />
+              </div>
+            ) : (
+              <div className="w-full" style={{ height: 320 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart margin={{ top: 20, right: 20, bottom: 60, left: 20 }}>
+                    <Pie data={statusData} cx="50%" cy="45%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value"
+                      label={({ name, percent }) => `${name}: ${((percent ?? 0) * 100).toFixed(0)}%`} labelLine>
+                      {statusData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                    </Pie>
+                    <Tooltip formatter={(v, name) => [`${v} plots`, name]}
+                      contentStyle={{ borderRadius: 8, border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', backgroundColor: 'white', padding: '8px 12px' }} />
+                    <Legend verticalAlign="bottom" align="center" layout="horizontal" wrapperStyle={{ paddingTop: 20, fontSize: 12 }} iconType="circle" iconSize={8} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* ── Plot inventory ── */}
         <section className="mt-2 overflow-hidden rounded-lg shadow-lg mb-8">
           <div className="p-4 border-b border-slate-100 flex justify-between">

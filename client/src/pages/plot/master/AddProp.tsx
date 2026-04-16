@@ -51,9 +51,6 @@ const STATUS_COLORS: Record<string, string> = {
   A: "#374151",
   "": "#374151",
 }
-const STATUS_LABELS: Record<string, string> = {
-  O: "Open", H: "Hold", B: "Booked", S: "Sold", R: "Reserved", A: "Active", "": "—",
-}
 interface ViewerProps {
   src: string
   plots: Plot[]
@@ -388,13 +385,24 @@ const AddProp = () => {
 
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
-  // plots
-  const handleAddPlot = () =>
+ const handleAddPlot = () =>
     setPlots(prev => [...prev, {
-      id: generateId(), plot_sr: (prev.length + 1).toString(),
-      plot_no: "", area: "", price: "", survey_no: "",
-      status: "O", plot_type: "plot", customer_name: "", book_date: "", book_amount: "",
-      sold_date: "", sold_amount: "", vc_remarks: "", cX: "", cY: "",
+      id: generateId(),
+      plot_sr: (prev.length + 1).toString(),
+      plot_no: "",
+      area: "",
+      price: "",
+      survey_no: "",
+      status: "O",
+      plot_type: "plot",
+      customer_name: "",
+      book_date: "",
+      book_amount: "",
+      sold_date: "",
+      sold_amount: "",
+      vc_remarks: "",
+      cX: "",
+      cY: "",
     }])
 
   const handleUpdatePlot = (id: string, field: keyof Plot, value: string) =>
@@ -502,7 +510,7 @@ const AddProp = () => {
                 </select>
               </div>
 
-              <div className="lg:col-span-3">
+              <div>
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Address Information</h2>
               </div>
               {/* Address Line 1 */}
@@ -596,7 +604,7 @@ const AddProp = () => {
 
               {/* Area */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Area</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Total Area</label>
                 <input
                   type="number"
                   name="area_name"
@@ -606,7 +614,7 @@ const AddProp = () => {
                 />
               </div>
 
-              <div className="lg:col-span-3">
+              <div>
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h2>
               </div>
               <div>
@@ -635,12 +643,12 @@ const AddProp = () => {
           {/* Section 2 — Plots */}
           <div className="p-6 border-t border-slate-200 dark:border-slate-700">
             <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Plots Information</h2>
-            <div className="mb-4 flex justify-end">
+            {/* <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleAddPlot}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
                 <MdFormatListBulletedAdd size={18} /> Add Plot
               </button>
-            </div>
+            </div> */}
 
             {plots.length > 0 ? (
               <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
@@ -712,6 +720,12 @@ const AddProp = () => {
                 <p className="text-slate-500 text-sm mt-1">Click "Add Plot" to add plots for this property</p>
               </div>
             )}
+            <div className="mb-4 flex justify-end">
+              <button type="button" onClick={handleAddPlot}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
+                <MdFormatListBulletedAdd size={18} /> Add Plot
+              </button>
+            </div>
           </div>
 
           {/* Section 3 — Interactive Placement (image only) */}
