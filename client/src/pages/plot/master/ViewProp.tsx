@@ -113,9 +113,12 @@ const ViewProp = () => {
   };
 
   const filteredData = data?.filter((project: ProjectResponse) =>
-    (project.project_details.project_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project.project_details.nick_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project.project_details.address.city?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
+    (project?.project_details?.project_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (project?.project_details?.nick_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (project?.project_details?.address.city?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (project?.project_details?.address.district?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (project?.project_details?.address.line1?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (project?.project_details?.address.pin_code?.toString().toLowerCase() ?? "").includes(searchTerm.toLowerCase())
   );
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -125,7 +128,7 @@ const ViewProp = () => {
   // Project Card Component
   const ProjectCard = ({ project }: { project: ProjectResponse }) => {
     const { project_details, project_statistics } = project;
-    const address = project_details.address;
+    const address = project_details?.address;
 
     return (
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700 overflow-hidden m-2 p-2">
@@ -135,7 +138,7 @@ const ViewProp = () => {
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white">
-                  {project_details.project_name}
+                  {project_details?.project_name}
                 </h3>
               </div>
               <div className="flex items-center gap-1 mt-2 text-slate-500 dark:text-slate-400 text-sm">
@@ -145,7 +148,7 @@ const ViewProp = () => {
                 </span>
               </div>
               <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Code: {project_details.ext_code} | Type: {project_details.project_type}
+                Code: {project_details?.ext_code} | Type: {project_details?.project_type}
               </div>
             </div>
             <div className="flex justify-center gap-2">
@@ -159,7 +162,7 @@ const ViewProp = () => {
                 to={`/plot/master/plot-edit?propId=${project_details?.project_id}&isEdit=true`}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-100 dark:bg-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center gap-1"
               >
-                <CiEdit className="w-4 h-4" />
+                <CiEdit className="w-6 h-6" />
               </Link>
             </div>
           </div>
@@ -173,27 +176,27 @@ const ViewProp = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             <div className="text-center p-1 rounded-lg bg-green-100 dark:bg-green-900">
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{project_statistics.available_plots}</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{project_statistics?.available_plots}</p>
               <p className="text-xs text-green-600 dark:text-green-400">Available</p>
             </div>
             <div className="text-center rounded-lg bg-red-100 dark:bg-red-900">
-              <p className="text-2xl font-bold text-red-600 dark:text-red-400">{project_statistics.sold_plots}</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">{project_statistics?.sold_plots}</p>
               <p className="text-xs text-red-600 dark:text-red-400">Sold</p>
             </div>
             <div className="text-center rounded-lg bg-blue-100 dark:bg-blue-900">
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{project_statistics.booked_plots}</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{project_statistics?.booked_plots}</p>
               <p className="text-xs text-blue-600 dark:text-blue-400">Booked</p>
             </div>
             <div className="text-center rounded-lg bg-purple-100 dark:bg-purple-900">
-              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{project_statistics.reserved_plots}</p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{project_statistics?.reserved_plots}</p>
               <p className="text-xs text-purple-600 dark:text-purple-400">Reserved</p>
             </div>
             <div className="text-center rounded-lg bg-yellow-100 dark:bg-yellow-900">
-              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{project_statistics.hold_plots}</p>
+              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{project_statistics?.hold_plots}</p>
               <p className="text-xs text-yellow-600 dark:text-yellow-400">On Hold</p>
             </div>
             <div className="text-center rounded-lg bg-slate-100 dark:bg-slate-900">
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">{project_statistics.total_plots}</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{project_statistics?.total_plots}</p>
               <p className="text-xs text-slate-800 dark:text-white">Total Plots</p>
             </div>
           </div>
@@ -204,15 +207,15 @@ const ViewProp = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white text-center">
             Projects Management
           </h1>
-          <p className="text-center text-slate-500 dark:text-slate-400 text-sm mt-1">
+          {/* <p className="text-center text-slate-500 dark:text-slate-400 text-sm mt-1">
             View all master projects and their statistics
-          </p>
+          </p> */}
         </div>
 
         {/* Action Bar */}
@@ -226,8 +229,8 @@ const ViewProp = () => {
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
-                  placeholder="Search by project name, nick name or city..."
+                  className="block w-full pl-10 pr-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition bg-white"
+                  placeholder="Search by project name, city..."
                   onChange={(e) => handleSearch(e.target.value)}
                 />
               </div>
@@ -239,7 +242,7 @@ const ViewProp = () => {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-slate-700 dark:text-slate-300">Show</span>
                 <select
-                  className="py-2 px-3 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
+                  className="py-2 px-3 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition bg-white"
                   onChange={(e: any) => setItemsPerPage(parseInt(e.target.value))}
                   value={itemsPerPage}
                 >
@@ -273,7 +276,7 @@ const ViewProp = () => {
             <div className="space-y-4">
               {currentItems.map((project: ProjectResponse) => (
                 <ProjectCard
-                  key={project.project_details.project_id}
+                  key={project?.project_details?.project_id}
                   project={project}
                 />
               ))}

@@ -4,7 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { AddPlotProperty, getAllProjects, getPlotsFromStatus, getProjectDetails, getProjectPlotById, UpdatePlotProperty } from "../../controller/plot/plotController.js";
-
+import {authenticateToken} from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post('/AddPlotProperty', upload.single('file'), AddPlotProperty);
-router.get('/getAllProjects',getAllProjects);
+router.get('/getAllProjects',authenticateToken, getAllProjects);
 router.get("/getProjectDetails/:project_id", getProjectDetails);
 router.put('/UpdatePlotProperty', UpdatePlotProperty);
 router.post("/getPlotsFromStatus",getPlotsFromStatus)

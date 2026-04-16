@@ -41,6 +41,7 @@ const shapePlot = (p) => ({
   price: p.price,
   survey_no: p.survey_no,
   status: p.status,
+  plot_type : p.plot_type,
   status_text: toStatusText(p.status),
   customer_name: p.customer_name,
   reference_by: p.reference_by,
@@ -61,10 +62,6 @@ const dbQuery = (sql, params = []) =>
   new Promise((resolve, reject) =>
     db.query(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
   );
-
-
-
-
 export const AddPlotProperty = (req, res) => {
   try {
     let propertyData, plots, userId;
@@ -240,15 +237,14 @@ export const getAllProjects = async (req, res) => {
         p.ext_code, p.geo_location, p.project_type,
         p.status, p.file_path,
         p.c_at, p.c_by, p.u_at, p.u_by,
-        /* aggregate stats in a single pass — no second query needed */
-        COUNT(pl.plot_sr)                                        AS total_plots,
-        SUM(pl.status = 'O')                                     AS available_plots,
-        SUM(pl.status = 'S')                                     AS sold_plots,
-        SUM(pl.status = 'B')                                     AS booked_plots,
-        SUM(pl.status = 'H')                                     AS hold_plots,
-        SUM(pl.status = 'R')                                     AS reserved_plots,
-        COALESCE(SUM(pl.price), 0)                               AS total_value,
-        COALESCE(SUM(pl.area),  0)                               AS total_area
+        COUNT(pl.plot_sr)  AS total_plots,
+        SUM(pl.status = 'O') AS available_plots,
+        SUM(pl.status = 'S') AS sold_plots,
+        SUM(pl.status = 'B') AS booked_plots,
+        SUM(pl.status = 'H') AS hold_plots,
+        SUM(pl.status = 'R') AS reserved_plots,
+        COALESCE(SUM(pl.price), 0) AS total_value,
+        COALESCE(SUM(pl.area),  0) AS total_area
       FROM xx_project_master p
       LEFT JOIN xx_project_plot pl ON pl.project_id = p.project_id
       GROUP BY p.project_id
@@ -295,7 +291,6 @@ export const getAllProjects = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
-
 
 export const getProjectPlotById = (req, res) => {
   try {
@@ -430,17 +425,21 @@ export const getProjectPlotById = (req, res) => {
 
 export const UpdatePlotProperty = (req, res) => {
   try {
-    const { project_id, plot_sr, plot_no, area, price, survey_no, status, customer_name, reference_by, book_date, book_amount, sold_date, sold_amount, vc_remarks } = req.body.formData;
+    const { project_id, plot_sr, plot_no, area, price, survey_no, status, plot_type, customer_name, reference_by, book_date, book_amount, sold_date, sold_amount, vc_remarks } = req.body.formData;
     const userId = req.body.UserId;
+
+    if (!project_id || !plot_sr || !plot_no) {
+      return res.status(400).json({ message: 'project_id , plot_sr, plot_no is required' });
+    }
 
     const sql = `
       UPDATE xx_project_plot SET
-        plot_no = ?, area = ?, price = ?, survey_no = ?, status = ?, customer_name = ?, reference_by =?, book_date = ?, book_amount = ?, sold_date = ?,
+        plot_no = ?, area = ?, price = ?, survey_no = ?, status = ?, plot_type = ?, customer_name = ?, reference_by =?, book_date = ?, book_amount = ?, sold_date = ?,
         sold_amount = ?, vc_remarks = ?, u_at = NOW(), u_by = ?
       WHERE project_id = ? AND plot_sr = ?
     `;
 
-    const values = [plot_no, area, price, survey_no, status, customer_name, reference_by, book_date, book_amount, sold_date, sold_amount, vc_remarks, userId, project_id, plot_sr];
+    const values = [plot_no, area, price, survey_no, status, plot_type, customer_name, reference_by, book_date, book_amount, sold_date, sold_amount, vc_remarks, userId, project_id, plot_sr];
 
     db.query(sql, values, (err, result) => {
       if (err) {
@@ -471,7 +470,7 @@ export const getProjectDetails = async (req, res) => {
     const [projectRows, plotRows] = await Promise.all([
       dbQuery('SELECT * FROM xx_project_master WHERE project_id = ? LIMIT 1', [project_id]),
       dbQuery(
-        `SELECT plot_sr, project_id, plot_no, area, price, survey_no, status,
+        `SELECT plot_sr, project_id, plot_no, area, price, survey_no, status, plot_type,
                 customer_name, reference_by, book_date, book_amount,
                 sold_date, sold_amount, vc_remarks, cX, cY,
                 c_at, c_by, u_at, u_by
@@ -519,7 +518,6 @@ export const getProjectDetails = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
-
 
 export const getPlotsFromStatus = async (req, res) => {
   try {

@@ -10,6 +10,8 @@ import postRoutes from "./Routes/post/postRoutes.js";
 import propertyRoutes from "./Routes/property/propertyRoutes.js";
 import storeRoutes from "./Routes/store/storeRoutes.js";
 import storeauthRoutes from "./Routes/storeauth/authRoutes.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = 2000;

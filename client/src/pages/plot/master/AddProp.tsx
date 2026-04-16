@@ -3,10 +3,10 @@ import CryptoJS from "crypto-js"
 import { useCallback, useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { CiTrash } from "react-icons/ci"
-import { IoAddCircleOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import { AddPlotProperty } from "../../../services/plot/plotApi"
 import { FiArrowLeft } from "react-icons/fi"
+import { MdFormatListBulletedAdd } from "react-icons/md"
 
 interface Plot {
   id: string
@@ -54,12 +54,6 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUS_LABELS: Record<string, string> = {
   O: "Open", H: "Hold", B: "Booked", S: "Sold", R: "Reserved", A: "Active", "": "—",
 }
-
-const MARKER_R = 14
-const VIEWER_H = 560
-
-const generateId = () => Date.now().toString() + Math.random().toString(36).substr(2, 9)
-
 interface ViewerProps {
   src: string
   plots: Plot[]
@@ -67,6 +61,11 @@ interface ViewerProps {
   pendingId: string | null
   onPlaced: () => void
 }
+
+const MARKER_R = 14
+const VIEWER_H = 560
+
+const generateId = () => Date.now().toString() + Math.random().toString(36).substr(2, 9)
 
 const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: ViewerProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -390,7 +389,6 @@ const AddProp = () => {
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
   // plots
-
   const handleAddPlot = () =>
     setPlots(prev => [...prev, {
       id: generateId(), plot_sr: (prev.length + 1).toString(),
@@ -412,7 +410,6 @@ const AddProp = () => {
   const handleMarkerDrop = (id: string, cX: string, cY: string) => setPlots(prev => prev.map(p => p.id === id ? { ...p, cX, cY } : p))
 
   // file 
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]; if (!f) return
     setSelectedFile(f)
@@ -455,7 +452,7 @@ const AddProp = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
-      <div className="max-w-7xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+      <div className="max-w-6xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
 
         <div className="p-6 border-b border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
@@ -641,7 +638,7 @@ const AddProp = () => {
             <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleAddPlot}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
-                <IoAddCircleOutline size={18} /> Add Plot
+                <MdFormatListBulletedAdd size={18} /> Add Plot
               </button>
             </div>
 
@@ -770,14 +767,6 @@ const AddProp = () => {
               />
 
               {/* Legend + progress */}
-              <div className="mt-3 flex flex-wrap gap-3">
-                {Object.entries(STATUS_COLORS).filter(([k]) => k !== "" && k !== "A").map(([code, color]) => (
-                  <div key={code} className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
-                    {STATUS_LABELS[code]}
-                  </div>
-                ))}
-              </div>
               <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
                 <div className="flex-1 bg-slate-200 rounded-full h-2 overflow-hidden">
                   <div className="h-2 rounded-full bg-green-500 transition-all duration-500"

@@ -199,6 +199,27 @@ const EditProp = () => {
     setShow(true);
   }
 
+  const handleSubmit = async () => {
+    const body = {
+      project_name: propertyData.project_name,
+      nick_name: propertyData.nick_name,
+      add1: propertyData.add1,
+      add2: propertyData.add2,
+      add3: propertyData.add3,
+      city: propertyData.city,
+      pin_code: propertyData.pin_code,
+      area: propertyData.area,
+      district: propertyData.district,
+      state: propertyData.state,
+      ext_code: propertyData.ext_code,
+      geo_location: propertyData.geo_location,
+      project_type: propertyData.project_type,
+      status: propertyData.status,
+    }
+    console.log(body);
+
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
@@ -212,7 +233,7 @@ const EditProp = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
-      <div className="max-w-7xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+      <div className="max-w-6xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
 
         {/* Header */}
         <div className="p-6 border-b border-slate-200 dark:border-slate-700">
@@ -246,8 +267,8 @@ const EditProp = () => {
                 name="project_name"
                 value={propertyData.project_name}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 required
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
@@ -259,8 +280,8 @@ const EditProp = () => {
                 name="nick_name"
                 value={propertyData.nick_name}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -270,8 +291,8 @@ const EditProp = () => {
                 name="project_type"
                 value={propertyData.project_type}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               >
                 <option value="">Select Type</option>
@@ -293,8 +314,8 @@ const EditProp = () => {
                 name="add1"
                 value={propertyData.add1}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -305,8 +326,8 @@ const EditProp = () => {
                 name="add2"
                 value={propertyData.add2}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -317,8 +338,8 @@ const EditProp = () => {
                 name="add3"
                 value={propertyData.add3}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -329,8 +350,8 @@ const EditProp = () => {
                 name="city"
                 value={propertyData.city}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 required
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
@@ -342,8 +363,8 @@ const EditProp = () => {
                 name="district"
                 value={propertyData.district}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -354,8 +375,8 @@ const EditProp = () => {
                 name="state"
                 value={propertyData.state}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 required
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
@@ -367,8 +388,8 @@ const EditProp = () => {
                 name="pin_code"
                 value={propertyData.pin_code}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -381,7 +402,7 @@ const EditProp = () => {
                 onChange={handlePropertyChange}
                 // disabled={!isEditMode}
                 disabled
-                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
+                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
 
@@ -395,8 +416,8 @@ const EditProp = () => {
                 name="ext_code"
                 value={propertyData.ext_code}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -406,8 +427,8 @@ const EditProp = () => {
                 name="status"
                 value={propertyData.status}
                 onChange={handlePropertyChange}
-                // disabled={!isEditMode}
-                disabled
+                disabled={!isEditMode}
+                // disabled
                 className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               >
                 <option value="">Select Status</option>
@@ -547,12 +568,15 @@ const EditProp = () => {
           >
             Cancel
           </button>
-          <button
-            type="button"
-            className="flex items-center gap-2 px-6 py-2.5 rounded-lg border bg-blue-600 border-blue-300 dark:border-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-700 transition-all"
-          >
-            Submit
-          </button>
+          {isEditMode && (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-lg border bg-blue-600 border-blue-300 dark:border-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-700 transition-all"
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
       {show && (<EditPlot show={show} setShow={setShow} selectedPlot={selectedPlot} fetchProjectData={fetchProjectData} isEdit={isEdit} />)}

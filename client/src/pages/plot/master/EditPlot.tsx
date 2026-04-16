@@ -222,8 +222,7 @@ const EditPlot: FC<Props> = ({ show, setShow, selectedPlot, fetchProjectData, is
                 <select
                   name="plot_type"
                   value={formData.plot_type}
-                  onChange={handleChange}
-                  disabled
+                  onChange={handleChange} 
                   className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent disabled:cursor-not-allowed"
                 >
                   <option value="plot">Plot</option>

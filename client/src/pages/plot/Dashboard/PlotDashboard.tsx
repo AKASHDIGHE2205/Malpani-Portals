@@ -14,6 +14,7 @@ import { getAllProjects, getPlotsFromStatus, getProjectDeatils } from '../../../
 import { ProjectResponse } from '../master/ViewProp';
 import { Link } from 'react-router-dom';
 import EditPlot from '../master/EditPlot';
+import { BiMap, BiMapPin } from 'react-icons/bi';
 
 type PlotStatus = 'O' | 'S' | 'B' | 'R' | 'H' | 'U';
 const STATUS_COLORS: Record<string, string> = {
@@ -67,17 +68,17 @@ const KPICard = ({ icon: Icon, label, value, colorClass, iconColor, loading }: K
     className="p-4 flex flex-col justify-between rounded-2xl shadow-lg bg-gray-50 dark:bg-gray-600"
   >
     <div className="flex items-center justify-between mb-2">
-      <div className={`p-3 rounded-lg ${colorClass} bg-opacity-20`}>
+      <div className={`p-3 rounded-lg ${colorClass} bg-opacity-20 hidden`}>
         <Icon size={18} className={iconColor} />
       </div>
-      <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</span>
+      <span className="text-xs font-medium text-slate-500 dark:text-slate-200 uppercase tracking-wider">{label}</span>
     </div>
     {loading ? (
       <Skeleton className="h-8 w-20" />
     ) : (
       <div className="flex items-center gap-1">
         <h3 className="text-2xl font-bold text-slate-800 dark:text-white">{value}</h3>
-        <span className="text-slate-500 text-sm">Plots</span>
+        <span className="text-slate-500 dark:text-slate-400 text-sm">Plots</span>
       </div>
     )}
   </motion.div>
@@ -201,7 +202,13 @@ const ImageViewer = ({ src, alt, plots, onPlotClick, }: { src: string; alt: stri
   const placedPlots = plots.filter(p => p.cX != null && p.cX !== '' && p.cY != null && p.cY !== '');
 
   return (
-    <div style={{ position: 'relative', background: '#e2e8f0' }}>
+    <div style={{
+      position: 'relative',
+      background: '#e2e8f0',
+      overflow: 'hidden',
+      isolation: 'isolate'
+
+    }}>
       {/* zoom controls */}
       <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 40, display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(255,255,255,0.93)', backdropFilter: 'blur(6px)', borderRadius: 10, padding: '5px 8px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
         {([
@@ -223,7 +230,15 @@ const ImageViewer = ({ src, alt, plots, onPlotClick, }: { src: string; alt: stri
         onWheel={handleWheel}
         onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
         onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}
-        style={{ width: '100%', height: VIEWER_H, overflow: 'hidden', position: 'relative', cursor: panDragging.current ? 'grabbing' : zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
+        style={{
+          width: '100%',
+          height: VIEWER_H,
+          overflow: 'hidden',        // already there ✓
+          position: 'relative',
+          isolation: 'isolate',      // ← ADD THIS — creates new stacking context
+          cursor: panDragging.current ? 'grabbing' : zoom > 1 ? 'grab' : 'default',
+          touchAction: 'none'
+        }}
       >
         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `translate(${pan.x}px,${pan.y}px) scale(${zoom})`, transformOrigin: 'center center', transition: panDragging.current ? 'none' : 'transform 0.12s ease-out', willChange: 'transform' }}>
           <img ref={imgRef} src={src} alt={alt} draggable={false}
@@ -304,7 +319,7 @@ const PlotDashboard = () => {
   const [plotStatus, setPlotStatus] = useState('O');
   const [plotDetails, setPlotDetails] = useState<any[]>([]);
   const [plotsLoading, setPlotsLoading] = useState(false);
-  const [isLayoutExpanded, setIsLayoutExpanded] = useState(false);
+  const [isLayoutExpanded, setIsLayoutExpanded] = useState(true);
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -393,7 +408,7 @@ const PlotDashboard = () => {
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]" />
         </div>
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div className="flex-1">
               {detailsLoading ? (
@@ -410,7 +425,8 @@ const PlotDashboard = () => {
                   <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight mt-2 mb-2">
                     {project_details?.project_name ?? 'Select a project'}
                   </h1>
-                  <p className="text-slate-300">
+                  <p className="text-slate-300 flex justify-start items-center gap-1">
+                    <BiMap className='h-4 w-4 ' />
                     {[project_details?.address?.line1, project_details?.address?.city,
                     project_details?.address?.pin_code, project_details?.address?.state]
                       .filter(Boolean).join(', ')}
@@ -426,7 +442,7 @@ const PlotDashboard = () => {
                   value={selectedProject}
                   onChange={e => setSelectedProject(Number(e.target.value))}
                   disabled={projectsLoading}
-                  className="appearance-none bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-3 pr-12 text-white font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:bg-white/20 w-full disabled:opacity-50"
+                  className="appearance-none bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-3 pr-12 text-white font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 hover:bg-white/20 w-full disabled:opacity-50"
                 >
                   {projects.map(p => (
                     <option key={p?.project_details?.project_id} value={p?.project_details?.project_id} className="text-slate-900">
@@ -441,17 +457,32 @@ const PlotDashboard = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 -mt-6 relative rounded-lg">
+      <main className="mx-auto max-w-6xl px-6 -mt-6 relative rounded-lg">
 
         {/* ── KPI ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
           {[
-            { icon: MdOutlineLayers, label: 'Total', value: project_statistics?.total_plots ?? 0, colorClass: 'bg-blue-500', iconColor: 'text-blue-700' },
-            { icon: MdOutlineCheckCircle, label: 'Available', value: project_statistics?.available_plots ?? 0, colorClass: 'bg-green-500', iconColor: 'text-green-700' },
+            {
+              icon: MdOutlineCheckCircle, label: 'Available', value: project_statistics?.available_plots ?? 0,
+              colorClass: 'bg-green-500 dark:bg-green-300', iconColor: 'text-green-700'
+            },
             { icon: MdOutlineLock, label: 'Sold', value: project_statistics?.sold_plots ?? 0, colorClass: 'bg-red-500', iconColor: 'text-red-700' },
-            { icon: MdOutlineAccessTime, label: 'Booked', value: project_statistics?.booked_plots ?? 0, colorClass: 'bg-yellow-500', iconColor: 'text-yellow-700' },
-            { icon: MdPauseCircle, label: 'Hold', value: project_statistics?.hold_plots ?? 0, colorClass: 'bg-orange-500', iconColor: 'text-orange-700' },
-            { icon: FaRegStopCircle, label: 'Reserved', value: project_statistics?.reserved_plots ?? 0, colorClass: 'bg-purple-500', iconColor: 'text-purple-700' },
+            {
+              icon: MdOutlineAccessTime, label: 'Booked', value: project_statistics?.booked_plots ?? 0,
+              colorClass: 'bg-yellow-500 dark:bg-yellow-300', iconColor: 'text-yellow-700'
+            },
+            {
+              icon: MdPauseCircle, label: 'Hold', value: project_statistics?.hold_plots ?? 0,
+              colorClass: 'bg-orange-500 dark:bg-orange-300', iconColor: 'text-orange-700'
+            },
+            {
+              icon: FaRegStopCircle, label: 'Reserved', value: project_statistics?.reserved_plots ?? 0,
+              colorClass: 'bg-purple-500 dark:bg-purple-300', iconColor: 'text-purple-700'
+            },
+            {
+              icon: MdOutlineLayers, label: 'Total', value: project_statistics?.total_plots ?? 0,
+              colorClass: 'bg-blue-500 dark:bg-blue-300', iconColor: 'text-blue-700'
+            }
           ].map(card => (
             <KPICard key={card.label} {...card} loading={detailsLoading} />
           ))}
@@ -481,7 +512,7 @@ const PlotDashboard = () => {
               <div className="flex items-center justify-center" style={{ height: VIEWER_H }}>
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4" />
-                  <p className="text-slate-500 text-sm">Loading layout…</p>
+                  <p className="text-slate-500 text-sm">Loading…</p>
                 </div>
               </div>
             ) : fileType === 'pdf' ? <PDFViewer src={fileUrl!} title="Project Layout" />
