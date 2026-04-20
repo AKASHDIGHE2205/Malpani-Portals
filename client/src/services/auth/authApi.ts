@@ -82,3 +82,29 @@ export const UpdateOtp = async (data: any) => {
     throw error;
   }
 };
+
+
+// -------------------  Master User  ------------------------------- 
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get(`${BaseUrl}/auth/getAllUsers`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || "Network Error.");
+    return null;
+  }
+};
+
+export const editUser = async (data: any) => {
+  try {
+    const response = await axios.put(`${BaseUrl}/auth/editUser`, data);
+    if (response.status === 200) {
+      toast.success(response.data.message || "User updated successfully.");
+      return response.data;
+    }
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || "Error updating user.");
+  }
+};

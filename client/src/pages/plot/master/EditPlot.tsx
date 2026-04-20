@@ -54,6 +54,7 @@ const EditPlot: FC<Props> = ({ show, setShow, selectedPlot, fetchProjectData, is
     cY: "",
   });
   const secretKey = "Malpani@2025";
+  
   // Populate form data when selectedPlot changes
   useEffect(() => {
     if (selectedPlot) {
@@ -128,6 +129,7 @@ const EditPlot: FC<Props> = ({ show, setShow, selectedPlot, fetchProjectData, is
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={handleOverlayClick}
     >
+
       <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700">
 
         {/* Header */}
@@ -357,8 +359,9 @@ const EditPlot: FC<Props> = ({ show, setShow, selectedPlot, fetchProjectData, is
                 name="vc_remarks"
                 value={formData.vc_remarks}
                 onChange={handleChange}
+                disabled={!isEdit}
                 rows={3}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-none disabled:cursor-not-allowed"
                 placeholder="Enter any remarks or notes"
               />
             </div>

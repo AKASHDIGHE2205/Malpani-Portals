@@ -2,9 +2,9 @@ import db from '../../db.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
-import {SECRET_KEY}  from "../../config/env.js";
+import { SECRET_KEY } from "../../config/env.js";
 
-// REGISTER USER  
+// REGISTER USER
 export const registerUser = async (req, res) => {
   try {
     const { f_name, l_name, password, email, mobile } = req.body;
@@ -272,5 +272,83 @@ export const updatePassword = async (req, res) => {
   } catch (error) {
     console.error("Password reset error:", error);
     return res.status(500).json({ success: false, message: "Something went wrong while resetting password", });
+  }
+};
+
+// ---------------- USER MASTERS ----------------//
+export const getAllUsers = (req, res) => {
+  const sql = "SELECT id, first_name, last_name, email, mobile, role, user_type, loc_id, status, otp_code, otp_expiry FROM app_users";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Error occurred while fetching users", error: err });
+    }
+    res.status(200).json(results);
+  });
+};
+
+export const editUser = async (req, res) => {
+  const { id, password, first_name, last_name, email, mobile, role, user_type, loc_id, status } = req.body;
+
+  if (!id || !first_name || !email || !mobile || !role || !user_type || !status) {
+    return res.status(400).json({ message: "Missing required fields." });
+  }
+
+  try {
+    // Check if user exists
+    const checkUserSql = "SELECT id FROM app_users WHERE id = ?";
+    db.query(checkUserSql, [id], async (err, results) => {
+      if (err) {
+        return res.status(500).json({ message: "Error checking user", error: err });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ message: "User not found." });
+      }
+
+      const checkEmailSql = "SELECT id FROM app_users WHERE email = ? AND id != ?";
+      db.query(checkEmailSql, [email, id], async (err, emailResults) => {
+        if (err) {
+          return res.status(500).json({ message: "Error checking email", error: err });
+        }
+
+        if (emailResults.length > 0) {
+          return res.status(400).json({ message: "Email already exists for another user." });
+        }
+
+        let sql, params;
+
+        if (password) {
+          const hashedPassword = await bcrypt.hash(password, 10);
+          sql = `UPDATE app_users SET 
+            password = ?, first_name = ?, last_name = ?, email = ?, mobile = ?, 
+            role = ?, user_type = ?, loc_id = ?, status = ? 
+            WHERE id = ?`;
+          params = [hashedPassword, first_name, last_name || null, email, mobile, role, user_type, loc_id || null, status, id];
+        } else {
+          sql = `UPDATE app_users SET 
+            first_name = ?, last_name = ?, email = ?, mobile = ?, 
+            role = ?, user_type = ?, loc_id = ?, status = ? 
+            WHERE id = ?`;
+          params = [first_name, last_name || null, email, mobile, role, user_type, loc_id || null, status, id];
+        }
+
+        db.query(sql, params, (err, results) => {
+          if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+              return res.status(400).json({ message: "Email or mobile already exists." });
+            }
+            return res.status(500).json({ message: "Error updating user", error: err });
+          }
+
+          if (results.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found or no changes made." });
+          }
+
+          res.status(200).json({ message: "User updated successfully." });
+        });
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

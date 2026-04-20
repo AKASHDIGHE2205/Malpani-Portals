@@ -31,7 +31,13 @@ interface NavItem {
   path?: string;
   children?: NavItem[];
   permission?: (user: User | null) => boolean;
-  hidden?: boolean; // Add hidden property
+  hidden?: boolean;
+}
+interface NavItemReader {
+  item: NavItem;
+  user: User | null;
+  onNavigate: () => void;
+  depth?: number;
 }
 
 // Helper function to check permission with proper return type
@@ -56,11 +62,20 @@ const navigationConfig: NavItem[] = [
     permission: () => true,
   },
   {
+    id: "user",
+    label: "User Master",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user-cog-icon lucide-user-cog"><path d="M10 15H6a4 4 0 0 0-4 4v2" /><path d="m14.305 16.53.923-.382" /><path d="m15.228 13.852-.923-.383" /><path d="m16.852 12.228-.383-.923" /><path d="m16.852 17.772-.383.924" /><path d="m19.148 12.228.383-.923" /><path d="m19.53 18.696-.382-.924" /><path d="m20.772 13.852.924-.383" /><path d="m20.772 16.148.924.383" /><circle cx="18" cy="15" r="3" /><circle cx="9" cy="7" r="4" /></svg>
+    ),
+    path: "/user-master",
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master') && (user?.user?.role === 'Master')),
+  },
+  {
     id: "store",
     label: "Store",
     icon: <VscFileSubmodule className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
-      (user.user.role === 'Master' || user.user.role === 'User')),
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Store') &&
+      (user?.user?.role === 'Master' || user?.user?.role === 'User')),
     children: [
       {
         id: "store-master",
@@ -100,8 +115,8 @@ const navigationConfig: NavItem[] = [
     id: "property",
     label: "Property",
     icon: <BsBuildings className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
-      (user.user.role === 'Master' || user.user.role === 'User')),
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Store') &&
+      (user?.user?.role === 'Master' || user?.user?.role === 'User')),
     children: [
       {
         id: "property-master",
@@ -143,8 +158,8 @@ const navigationConfig: NavItem[] = [
         <path d="M15 3v18" /><path d="M3 12h18" /><path d="M9 3v18" /><rect x="3" y="3" width="18" height="18" rx="2" />
       </svg>
     ),
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Store') &&
-      (user.user.role === 'Master' || user.user.role === 'User')),
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Store') &&
+      (user?.user?.role === 'Master' || user?.user?.role === 'User')),
     children: [
       { id: "plot-dashboard", label: "Dashboard", path: "/plot/dashboard", icon: <VscGraph className="w-3.5 h-3.5" /> },
       {
@@ -154,15 +169,15 @@ const navigationConfig: NavItem[] = [
           </svg>
         )
       },
-      // { id: "view-layout", label: "View Layout", path: "/plot/master/consignee", icon: <LuInbox className="w-3.5 h-3.5" /> },
+       { id: "plot-report", label: "Plot Report", path: "/plot/report", icon: <LuInbox className="w-3.5 h-3.5" /> },
     ],
   },
   {
     id: "post",
     label: "POST",
     icon: <FaFileAlt className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Post') &&
-      (user.user.role === 'Master' || user.user.role === 'User')),
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Post') &&
+      (user?.user?.role === 'Master' || user?.user?.role === 'User')),
     children: [
       {
         id: "post-master",
@@ -196,15 +211,15 @@ const navigationConfig: NavItem[] = [
     id: "super-shoppe",
     label: "Super Shoppe",
     icon: <FaStore className="w-5 h-5" />,
-    permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
-      (user.user.role === 'Master' || user.user.role === 'Admin' || user.user.role === 'Manager')),
+    permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Saragam') &&
+      (user?.user?.role === 'Master' || user?.user?.role === 'Admin' || user?.user?.role === 'Manager')),
     children: [
       {
         id: "shoppe-master",
         label: "Master",
         icon: <MdLeaderboard className="w-4 h-4" />,
-        permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
-          (user.user.role === 'Master' || user.user.role === 'Admin')),
+        permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Saragam') &&
+          (user?.user?.role === 'Master' || user?.user?.role === 'Admin')),
         children: [
           { id: "faq", label: "FAQ", path: "/sargam/master/faq-view", icon: <FaQuestionCircle className="w-3.5 h-3.5" /> },
           { id: "members", label: "Members", path: "/sargam/master/mem-view", icon: <FaUsers className="w-3.5 h-3.5" /> },
@@ -221,16 +236,16 @@ const navigationConfig: NavItem[] = [
             label: "Admin FAQ",
             path: "/saragam/master/admin-faq",
             icon: <FaUserShield className="w-3.5 h-3.5" />,
-            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
-              (user.user.role === 'Master' || user.user.role === 'Admin'))
+            permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Saragam') &&
+              (user?.user?.role === 'Master' || user?.user?.role === 'Admin'))
           },
           {
             id: "manager-faq",
             label: "Manager FAQ",
             path: "/saragam/master/manager-faq",
             icon: <FaUserTie className="w-3.5 h-3.5" />,
-            permission: (user) => !!(user && (user.user.user_type === 'Master' || user.user.user_type === 'Saragam') &&
-              (user.user.role === 'Master' || user.user.role === 'Admin' || user.user.role === 'Manager'))
+            permission: (user) => !!(user && (user?.user?.user_type === 'Master' || user?.user?.user_type === 'Saragam') &&
+              (user?.user?.role === 'Master' || user?.user?.role === 'Admin' || user?.user?.role === 'Manager'))
           },
         ],
       },
@@ -239,18 +254,7 @@ const navigationConfig: NavItem[] = [
 ];
 
 // Recursive component to render nav items
-const NavItemRenderer = ({
-  item,
-  user,
-  onNavigate,
-  depth = 0
-}: {
-  item: NavItem;
-  user: User | null;
-  onNavigate: () => void;
-  depth?: number;
-}) => {
-  // Check if item is hidden
+const NavItemRenderer = ({ item, user, onNavigate, depth = 0 }: NavItemReader) => {
   if (item.hidden) return null;
 
   // Check permission

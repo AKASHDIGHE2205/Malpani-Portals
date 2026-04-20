@@ -88,3 +88,16 @@ export const getPlotsFromStatus = async (data: any) => {
     toast.error(error.response.data.message);
   }
 }
+
+export const generateReport1 = async (data: any) => {
+  try {
+    const response = await axios.post(`${BaseUrl}/plot/generateReport1`, data, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    });
+    return response.data;
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+  }
+}

@@ -359,9 +359,20 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
 
 const AddProp = () => {
   const [propertyData, setPropertyData] = useState<PropertyFormData>({
-    project_name: "", nick_name: "", add1: "", add2: "", add3: "",
-    city: "", pin_code: "", area_name: "", district: "", state: "",
-    ext_code: "", geo_location: "", project_type: "", status: "A",
+    project_name: "",
+    nick_name: "",
+    add1: "",
+    add2: "",
+    add3: "",
+    city: "",
+    pin_code: "",
+    area_name: "",
+    district: "",
+    state: "",
+    ext_code: "",
+    geo_location: "",
+    project_type: "",
+    status: "A",
   })
   const [plots, setPlots] = useState<Plot[]>([])
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -385,7 +396,7 @@ const AddProp = () => {
 
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
- const handleAddPlot = () =>
+  const handleAddPlot = () =>
     setPlots(prev => [...prev, {
       id: generateId(),
       plot_sr: (prev.length + 1).toString(),
@@ -432,7 +443,22 @@ const AddProp = () => {
   }
 
   const handleCancel = () => {
-    setPropertyData({ project_name: "", nick_name: "", add1: "", add2: "", add3: "", city: "", pin_code: "", area_name: "", district: "", state: "", ext_code: "", geo_location: "", project_type: "", status: "A" })
+    setPropertyData({
+      project_name: "",
+      nick_name: "",
+      add1: "",
+      add2: "",
+      add3: "",
+      city: "",
+      pin_code: "",
+      area_name: "",
+      district: "",
+      state: "",
+      ext_code: "",
+      geo_location: "",
+      project_type: "",
+      status: "A"
+    })
     setPlots([]); setSelectedFile(null); setPreviewUrl(null); setFileType(null); setPendingId(null)
     navigate("/plot/master/plot-view")
   }
@@ -510,7 +536,7 @@ const AddProp = () => {
                 </select>
               </div>
 
-              <div>
+              <div className="lg:col-span-3">
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Address Information</h2>
               </div>
               {/* Address Line 1 */}
@@ -594,11 +620,11 @@ const AddProp = () => {
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">PIN Code</label>
                 <input
-                  type="text"
+                  type="number"
                   name="pin_code"
                   value={propertyData.pin_code}
                   onChange={handlePropertyChange}
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-end"
                 />
               </div>
 
@@ -610,11 +636,11 @@ const AddProp = () => {
                   name="area_name"
                   value={propertyData.area_name}
                   onChange={handlePropertyChange}
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-end"
                 />
               </div>
 
-              <div>
+              <div className="lg:col-span-3">
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h2>
               </div>
               <div>
@@ -642,7 +668,9 @@ const AddProp = () => {
 
           {/* Section 2 — Plots */}
           <div className="p-6 border-t border-slate-200 dark:border-slate-700">
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Plots Information</h2>
+            <div className="lg:col-span-3">
+              <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h2>
+            </div>
             {/* <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleAddPlot}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
@@ -651,9 +679,9 @@ const AddProp = () => {
             </div> */}
 
             {plots.length > 0 ? (
-              <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+              <div className="overflow-x-auto overflow-y-auto max-h-[400px] rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
                 <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                  <thead className="bg-slate-100 dark:bg-slate-700">
+                  <thead className="bg-slate-100 dark:bg-slate-700 sticky top-0">
                     <tr>
                       {/* "Status", this column is after th Type column */}
                       {["SR", "Plot No *", "Area * (sq.ft)", "Price", "Survey No", "Type", "Remark", "Position", "Actions"].map(h => (
@@ -731,45 +759,48 @@ const AddProp = () => {
           {/* Section 3 — Interactive Placement (image only) */}
           {previewUrl && fileType === "image" && (
             <div className="p-6 border-t border-slate-200 dark:border-slate-700">
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
-                Plot Placement on Layout
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-red-400 mb-4">
-                Click a badge → then click its location on the image. Placed markers can be dragged to reposition.
-                Use zoom/pan to work on detailed areas — marker positions are always saved relative to the image, not the screen.
-              </p>
 
-              {/* Unplaced tray */}
-              {unplacedPlots.length > 0 && (
-                <div className="mb-4 p-3 rounded-lg border border-dashed border-blue-300 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-700">
-                  <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 uppercase tracking-wide">
-                    Unplaced plots — click to select, then click on the image
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {unplacedPlots.map(plot => {
-                      const color = STATUS_COLORS[plot.status] ?? "#374151"
-                      const active = pendingId === plot.id
-                      return (
-                        <button key={plot.id} type="button"
-                          onClick={() => setPendingId(active ? null : plot.id)}
-                          title={`Select Plot ${plot.plot_no}`}
-                          style={{
-                            width: MARKER_R * 2 + 8, height: MARKER_R * 2 + 8,
-                            borderRadius: "50%", backgroundColor: color,
-                            border: active ? "3px solid #1e40af" : "2.5px solid #fff",
-                            boxShadow: active ? `0 0 0 3px #3b82f6, 0 4px 12px rgba(0,0,0,0.3)` : "0 2px 8px rgba(0,0,0,0.3)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 10, fontWeight: 700, color: "#fff", cursor: "pointer", padding: 0,
-                            transform: active ? "scale(1.2)" : "scale(1)", transition: "all 0.15s",
-                          }}
-                        >
-                          {String(plot.plot_no).slice(0, 4) || "?"}
-                        </button>
-                      )
-                    })}
+              <div className="p-6 border-t border-slate-200 dark:border-slate-700">
+                <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+                  Plot Placement on Layout
+                </h2>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                  Click a badge → then click its location on the image. Placed markers can be dragged to reposition.
+                  Use zoom/pan to work on detailed areas — marker positions are always saved relative to the image, not the screen.
+                </p>
+
+                {/* Unplaced tray */}
+                {unplacedPlots.length > 0 && (
+                  <div className="mb-4 p-3 rounded-lg border border-dashed border-blue-300 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-700">
+                    <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 uppercase tracking-wide">
+                      Unplaced plots — click to select, then click on the image
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {unplacedPlots.map(plot => {
+                        const color = STATUS_COLORS[plot.status] ?? "#374151"
+                        const active = pendingId === plot.id
+                        return (
+                          <button key={plot.id} type="button"
+                            onClick={() => setPendingId(active ? null : plot.id)}
+                            title={`Select Plot ${plot.plot_no}`}
+                            style={{
+                              width: MARKER_R * 2 + 8, height: MARKER_R * 2 + 8,
+                              borderRadius: "50%", backgroundColor: color,
+                              border: active ? "3px solid #1e40af" : "2.5px solid #fff",
+                              boxShadow: active ? `0 0 0 3px #3b82f6, 0 4px 12px rgba(0,0,0,0.3)` : "0 2px 8px rgba(0,0,0,0.3)",
+                              display: "flex", alignItems: "center", justifyContent: "center",
+                              fontSize: 10, fontWeight: 700, color: "#fff", cursor: "pointer", padding: 0,
+                              transform: active ? "scale(1.2)" : "scale(1)", transition: "all 0.15s",
+                            }}
+                          >
+                            {String(plot.plot_no).slice(0, 4) || "?"}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Viewer */}
               <ImageLayoutViewer

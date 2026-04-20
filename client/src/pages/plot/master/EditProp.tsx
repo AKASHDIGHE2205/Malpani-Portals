@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiEdit } from "react-icons/ci";
@@ -230,7 +229,7 @@ const EditProp = () => {
       geo_location: propertyData.geo_location,
       project_type: propertyData.project_type,
       status: propertyData.status,
-    } 
+    }
     const response = await updatePlotMaster(body);
     if (response.code === 200) {
       toast.success(response.message || "Project details updated successfully.");
@@ -402,13 +401,13 @@ const EditProp = () => {
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">PIN Code</label>
               <input
-                type="text"
+                type="number"
                 name="pin_code"
                 value={propertyData.pin_code}
                 onChange={handlePropertyChange}
                 disabled={!isEditMode}
                 // disabled
-                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
+                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-right ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
             <div>
@@ -420,7 +419,7 @@ const EditProp = () => {
                 onChange={handlePropertyChange}
                 // disabled={!isEditMode}
                 disabled
-                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
+                className={`w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed text-end ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
               />
             </div>
 
@@ -459,95 +458,60 @@ const EditProp = () => {
         </div>
 
         {/* Section 2 — Plots */}
-        <div className="p-6 border-t border-slate-200 dark:border-slate-700">
+        <div className="overflow-x-auto p-2 m-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
           <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Plots Information</h2>
 
           {plots.length > 0 ? (
-            <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+            <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6 overflow-y-auto max-h-[400px]">
               <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                <thead className="bg-slate-100 dark:bg-slate-700">
+                <thead className="bg-slate-100 dark:bg-slate-700 sticky top-0">
                   <tr>
-                    {["SR", "Plot No *", "Area * (sq.ft)", "Price", "Survey No", "Type", "Status", "Remark", "Actions"].map(h => (
-                      <th key={h} className="px-3 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">{h}</th>
+                    {/* "SR", "Price", "Type", */}
+                    {["Plot No", "Area", "Survey No", "Status", "Remark", "Actions"].map(h => (
+                      <th key={h} className="px-3 py-3 text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+                <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700 text-sm">
                   {plots.map(plot => (
                     <tr key={plot?.plot_sr} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                      <td className="px-3 py-1.5 text-sm text-slate-900 dark:text-slate-200">{plot?.plot_sr}</td>
-                      <td className="px-3 py-1.5">
-                        <input
-                          type="text"
-                          value={plot?.plot_no}
-                          disabled className={`w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                          placeholder="Plot No"
-                        />
+                      {/* <td className="px-3 py-1.5 text-sm text-slate-900 dark:text-slate-200">{plot?.plot_sr}</td> */}
+                      <td className="px-3 py-1.5 text-center">
+                        {plot?.plot_no}
                       </td>
-                      <td className="px-3 py-1.5">
-                        <input
-                          type="number"
-                          value={plot?.area}
-                          disabled
-                          className={`w-28 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                          placeholder="Area"
-                        />
+                      <td className="px-3 py-1.5 text-end">
+                        {plot?.area}
                       </td>
-                      <td className="px-3 py-1.5">
-                        <input
-                          type="number"
-                          value={plot?.price}
-                          disabled
-                          className={`w-32 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                          placeholder="Price"
-                        />
+                      {/* <td className="px-3 py-1.5 text-center">
+                        {plot?.price}
+                      </td> */}
+                      <td className="px-3 py-1.5 text-center">
+                        {plot?.survey_no}
                       </td>
-                      <td className="px-3 py-1.5">
-                        <input
-                          type="text"
-                          value={plot?.survey_no}
-                          disabled
-                          className={`w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                          placeholder="Survey No"
-                        />
+                      {/*<td className="px-3 py-1.5 text-center">
+                        {plot?.plot_type}
+                      </td> */}
+                      <td className="px-3 py-1.5 text-center">
+                        <span className={`px-2 rounded-xl 
+                          ${plot?.status === "O" ? "bg-green-100 text-green-600"
+                            : plot?.status === "H" ? "bg-yellow-100 text-yellow-600"
+                              : plot?.status === "B" ? "bg-blue-100 text-blue-600"
+                                : plot?.status === "S" ? "bg-red-100 text-red-600"
+                                  : plot?.status === "R" ? "bg-purple-100 text-purple-600"
+                                    : "bg-gray-100 text-gray-600"} 
+                          `}>
+                          {plot?.status === "O" ? "Available"
+                            : plot?.status === "H" ? "Hold"
+                              : plot?.status === "B" ? "Booked"
+                                : plot.status === "S" ? "Sold"
+                                  : plot?.status === "R" ? "Reserved"
+                                    : "Unknown"}
+                        </span>
                       </td>
-                      <td className="px-3 py-1.5">
-                        <select
-                          value={plot?.plot_type}
-                          disabled
-                          className={`w-32 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                        >
-                          <option value="plot">Plot</option>
-                          <option value="open_space">Open Space</option>
-                          <option value="amenity">Amenity Plot</option>
-                        </select>
+                      <td className="px-3 py-1.5 text-center">
+                        {plot?.vc_remarks}
                       </td>
-                      <td className="px-3 py-1.5">
-                        <select
-                          value={plot?.status}
-                          disabled
-                          className={`w-28 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm font-semibold
-                            ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}
-                                ${statusStyles[plot?.status as keyof typeof statusStyles] || ''}`}
-                        >
-                          <option value="">Select</option>
-                          <option value="O">Open</option>
-                          <option value="H">Hold</option>
-                          <option value="B">Booked</option>
-                          <option value="S">Sold</option>
-                          <option value="R">Reserved</option>
-                        </select>
-                      </td>
-                      <td className="px-3 py-1.5">
-                        <input
-                          type="text"
-                          value={plot?.vc_remarks}
-                          disabled
-                          className={`w-24 px-2 py-1 rounded border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm ${!isEditMode ? 'bg-slate-100 dark:bg-slate-900 cursor-not-allowed' : ''}`}
-                          placeholder="Remark"
-                        />
-                      </td>
-                      <td className="px-3 py-1.5 flex justify-center gap-1">
+                      <td className="px-3 py-1.5 text-center flex justify-center gap-2">
                         <button
                           type="button"
                           className="p-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all"

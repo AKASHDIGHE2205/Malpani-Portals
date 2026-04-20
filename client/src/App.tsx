@@ -10,6 +10,9 @@ import DefaultLayout from './layout/DefaultLayout';
 import { RootState } from './store/store';
 
 import ForgotPassword from "./pages/authentication/ForgotPassword";
+import UserView from './pages/User/UserView';
+import PlotRepoprt1 from './pages/plot/reports/PlotRepoprt1';
+
 const PlotDashboard = lazy(() => import('./pages/plot/Dashboard/PlotDashboard'));
 const AddProp = lazy(() => import('./pages/plot/master/AddProp'));
 const EditProp = lazy(() => import('./pages/plot/master/EditProp'));
@@ -94,6 +97,7 @@ function MainApp() {
         <Routes>
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Home />} />
+            <Route path='user-master' element={<UserView />} />
 
             {/*Store Transaction Routes */}
             <Route path="transaction/view" element={<EntryView />} />
@@ -156,6 +160,7 @@ function MainApp() {
             <Route path="plot/master/plot-edit" element={<EditProp />} />
             <Route path="plot/master/add-plot" element={<AddProp />} />
             <Route path="plot/dashboard" element={<PlotDashboard />} />
+            <Route path="plot/report" element={<PlotRepoprt1/>}/>
 
           </Route>
 

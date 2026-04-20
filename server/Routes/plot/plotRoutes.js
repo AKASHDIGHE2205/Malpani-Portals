@@ -3,8 +3,8 @@ import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { AddPlotProperty, getAllProjects, getPlotsFromStatus, getProjectDetails, UpdatePlotProperty, updatePlotMaster} from "../../controller/plot/plotController.js";
-import {authenticateToken} from "../../middleware/authMiddleware.js";
+import { AddPlotProperty, getAllProjects, getPlotsFromStatus, getProjectDetails, UpdatePlotProperty, updatePlotMaster, generateReport1 } from "../../controller/plot/plotController.js";
+// import { authenticateToken } from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -23,10 +23,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post('/AddPlotProperty', upload.single('file'), AddPlotProperty);
-router.get('/getAllProjects',authenticateToken, getAllProjects);
-router.get("/getProjectDetails/:project_id",authenticateToken, getProjectDetails);
+router.get('/getAllProjects', getAllProjects);
+router.get("/getProjectDetails/:project_id", getProjectDetails);
 router.put('/UpdatePlotProperty', UpdatePlotProperty);
 router.put('/updatePlotMaster', updatePlotMaster);
-router.post("/getPlotsFromStatus",authenticateToken,getPlotsFromStatus)
+router.post("/getPlotsFromStatus", getPlotsFromStatus);
+router.post("/generateReport1", generateReport1);
+
+// router.get("/getProjectDetails/:project_id",authenticateToken, getProjectDetails);
+// router.get('/getAllProjects',authenticateToken, getAllProjects);
+// router.post("/getPlotsFromStatus",authenticateToken,getPlotsFromStatus)
 
 export default router;

@@ -62,6 +62,7 @@ const dbQuery = (sql, params = []) =>
   new Promise((resolve, reject) =>
     db.query(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
   );
+
 export const AddPlotProperty = (req, res) => {
   try {
     let propertyData, plots, userId;
@@ -602,5 +603,88 @@ export const getPlotsFromStatus = async (req, res) => {
   } catch (error) {
     console.error('[getPlotsFromStatus]', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+export const generateReport1 = (req, res) => {
+  try {
+    const { project_id, status, from_date, to_date } = req.body;
+
+    let conditions = [];
+    let params = [];
+
+    // Project filter
+    if (project_id !== 'All') {
+      conditions.push('pm.project_id = ?');
+      params.push(project_id);
+    }
+
+    if (status !== 'All') {
+      conditions.push('pp.status = ?');
+      params.push(status);
+
+      if (status === 'B') {
+        conditions.push('pp.book_date BETWEEN ? AND ?');
+        params.push(from_date, to_date);
+      } else if (status === 'S') {
+        conditions.push('pp.sold_date BETWEEN ? AND ?');
+        params.push(from_date, to_date);
+      }
+    }
+
+    // WHERE clause
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    // IFNULL(pm.add3, ''), ", ",
+    const query = `
+      SELECT 
+        pm.project_id,
+        pm.project_name,
+        CONCAT(
+                IFNULL(pm.add1, ''), ", ",
+                IFNULL(pm.add2, ''), ", ",
+                IFNULL(pm.city, ''), ", ",
+                IFNULL(pm.pin_code, ''), ", ",
+                IFNULL(pm.district, ''), ", ",
+                IFNULL(pm.state, '')
+              ) AS address,
+        pp.plot_no,
+        pp.survey_no,
+        pp.area,
+        pp.status,
+        pp.plot_type,
+        pp.customer_name,
+        pp.reference_by,
+        pp.book_date,
+        pp.sold_date,
+        pp.vc_remarks
+      FROM xx_project_master pm
+      LEFT JOIN xx_project_plot pp 
+        ON pm.project_id = pp.project_id
+      ${whereClause}
+      ORDER BY pm.project_id, pp.plot_no
+    `;
+
+    db.query(query, params, (err, rows) => {
+      if (err) {
+        console.error('[generateReport1]', err);
+        return res.status(500).json({
+          message: 'Database error',
+          error: err.message
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        count: rows.length,
+        data: rows
+      });
+    });
+
+  } catch (error) {
+    console.error('[generateReport1]', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message
+    });
   }
 };

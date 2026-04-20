@@ -46,27 +46,27 @@ const Skeleton = ({ className = '' }: { className?: string }) => (
 );
 
 interface KPIProps {
-  icon: ElementType; label: string; value: string | number;
-  colorClass: string; iconColor: string; loading?: boolean;
+  label: string;
+  value: string | number;
+  colorClass: string;
+  textColor: string;
+  loading?: boolean;
 }
 
-const KPICard = ({ icon: Icon, label, value, colorClass, iconColor, loading }: KPIProps) => (
+const KPICard = ({ label, value, colorClass, textColor, loading }: KPIProps) => (
   <motion.div
     whileHover={{ scale: 1.02, y: -4 }}
-    className="p-4 flex flex-col justify-between rounded-2xl shadow-lg bg-gray-50 dark:bg-gray-600"
+    className={`p-4 flex flex-col justify-between rounded-2xl shadow-lg ${colorClass}`}
   >
     <div className="flex items-center justify-between mb-2">
-      <div className={`p-3 rounded-lg ${colorClass} bg-opacity-20 hidden`}>
-        <Icon size={18} className={iconColor} />
-      </div>
-      <span className="text-xs font-medium text-slate-500 dark:text-slate-200 uppercase tracking-wider">{label}</span>
+      <span className={`text-xs font-medium uppercase tracking-wider ${textColor}`}>{label}</span>
     </div>
     {loading ? (
       <Skeleton className="h-8 w-20" />
     ) : (
       <div className="flex items-center gap-1">
-        <h3 className="text-2xl font-bold text-slate-800 dark:text-white">{value}</h3>
-        <span className="text-slate-500 dark:text-slate-400 text-sm">Plots</span>
+        <h3 className={`text-2xl font-bold ${textColor}`}>{value}</h3>
+        <span className={`text-sm ${textColor}`}>Plots</span>
       </div>
     )}
   </motion.div>
@@ -435,24 +435,27 @@ const PlotDashboard = () => {
           {[
             {
               icon: MdOutlineCheckCircle, label: 'Available', value: project_statistics?.available_plots ?? 0,
-              colorClass: 'bg-green-500 dark:bg-green-300', iconColor: 'text-green-700'
+              colorClass: 'bg-green-100', textColor: 'text-green-700'
             },
-            { icon: MdOutlineLock, label: 'Sold', value: project_statistics?.sold_plots ?? 0, colorClass: 'bg-red-500', iconColor: 'text-red-700' },
+            {
+              icon: MdOutlineLock, label: 'Sold', value: project_statistics?.sold_plots ?? 0,
+              colorClass: 'bg-red-100', textColor: 'text-red-700'
+            },
             {
               icon: MdOutlineAccessTime, label: 'Booked', value: project_statistics?.booked_plots ?? 0,
-              colorClass: 'bg-yellow-500 dark:bg-yellow-300', iconColor: 'text-yellow-700'
+              colorClass: 'bg-yellow-100', textColor: 'text-yellow-700'
             },
             {
               icon: MdPauseCircle, label: 'Hold', value: project_statistics?.hold_plots ?? 0,
-              colorClass: 'bg-orange-500 dark:bg-orange-300', iconColor: 'text-orange-700'
+              colorClass: 'bg-orange-100', textColor: 'text-orange-700'
             },
             {
               icon: FaRegStopCircle, label: 'Reserved', value: project_statistics?.reserved_plots ?? 0,
-              colorClass: 'bg-purple-500 dark:bg-purple-300', iconColor: 'text-purple-700'
+              colorClass: 'bg-purple-100', textColor: 'text-purple-700'
             },
             {
               icon: MdOutlineLayers, label: 'Total', value: project_statistics?.total_plots ?? 0,
-              colorClass: 'bg-blue-500 dark:bg-blue-300', iconColor: 'text-blue-700'
+              colorClass: 'bg-blue-100', textColor: 'text-blue-700'
             }
           ].map(card => (
             <KPICard key={card.label} {...card} loading={detailsLoading} />
