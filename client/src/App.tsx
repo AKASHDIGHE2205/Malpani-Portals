@@ -8,7 +8,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Loadings from "./components/Loadings";
 import DefaultLayout from './layout/DefaultLayout';
 import { RootState } from './store/store';
-
 import ForgotPassword from "./pages/authentication/ForgotPassword";
 import UserView from './pages/User/UserView';
 import PlotRepoprt1 from './pages/plot/reports/PlotRepoprt1';
@@ -128,7 +127,7 @@ function MainApp() {
             <Route path="property/transaction/tran-view" element={<TranView />} />
             <Route path="property/transaction/create" element={<TranNewEntry />} />
             <Route path="property/sale-view" element={<SaleProView />} />
-            <Route path="property/sale-entry" element={<SaleNewEntry />} />       
+            <Route path="property/sale-entry" element={<SaleNewEntry />} />
 
 
             {/*Property Report  Routes */}
@@ -160,10 +159,9 @@ function MainApp() {
             <Route path="plot/master/plot-edit" element={<EditProp />} />
             <Route path="plot/master/add-plot" element={<AddProp />} />
             <Route path="plot/dashboard" element={<PlotDashboard />} />
-            <Route path="plot/report" element={<PlotRepoprt1/>}/>
+            <Route path="plot/report" element={<PlotRepoprt1 />} />
 
           </Route>
-
           <Route path="/log-out" element={<SignOut />} />
         </Routes>
       </Suspense>

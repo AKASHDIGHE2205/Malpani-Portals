@@ -64,7 +64,8 @@ interface ProjectResponse {
       pin_code: string;
       area: string;
     };
-    layout_file_url: string;
+    // layout_file_url: string;
+    file_path: string;
   };
   plots: any[];
 }
@@ -80,7 +81,6 @@ export type Status = 'O' | 'S' | 'B' | 'R' | 'H';
 
 const EditProp = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const propId = searchParams.get("propId");
   const isEditMode = searchParams.get("isEdit") === "true";
   const [propertyData, setPropertyData] = useState<PropertyFormData>({
@@ -100,10 +100,11 @@ const EditProp = () => {
     status: "A",
   });
   const [plots, setPlots] = useState<Plot[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [selectedPlot, setSelectedPlot] = useState<Plot>();
   const [isEdit, setIsEdit] = useState(false);
+  const navigate = useNavigate();
 
   const fetchProjectData = async () => {
     if (!propId) {
@@ -479,7 +480,7 @@ const EditProp = () => {
                       <td className="px-3 py-1.5 text-center">
                         {plot?.plot_no}
                       </td>
-                      <td className="px-3 py-1.5 text-end">
+                      <td className="px-3 py-1.5 text-center">
                         {plot?.area}
                       </td>
                       {/* <td className="px-3 py-1.5 text-center">
@@ -560,6 +561,7 @@ const EditProp = () => {
             </button>
           )}
         </div>
+
       </div>
       {show && (<EditPlot show={show} setShow={setShow} selectedPlot={selectedPlot} fetchProjectData={fetchProjectData} isEdit={isEdit} />)}
     </div>

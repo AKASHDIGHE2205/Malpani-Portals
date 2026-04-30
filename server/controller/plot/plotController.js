@@ -1,7 +1,13 @@
 import fs from 'fs';
 import db from '../../db.js';
 
-const STATUS_TEXT = { O: 'Open', S: 'Sold', B: 'Booked', R: 'Reserved', H: 'Hold' };
+const STATUS_TEXT = {
+  O: 'Open',
+  S: 'Sold',
+  B: 'Booked',
+  R: 'Reserved',
+  H: 'Hold'
+};
 const toStatusText = (s) => STATUS_TEXT[s] ?? 'Unknown';
 
 const calcStats = (plots) => {
@@ -260,9 +266,13 @@ export const getAllProjects = async (req, res) => {
         project_name: p.project_name,
         nick_name: p.nick_name,
         address: {
-          line1: p.add1, line2: p.add2, line3: p.add3,
-          city: p.city, pin_code: p.pin_code,
-          district: p.district, state: p.state,
+          line1: p.add1,
+          line2: p.add2,
+          line3: p.add3,
+          city: p.city,
+          pin_code: p.pin_code,
+          district: p.district,
+          state: p.state,
         },
         ext_code: p.ext_code,
         geo_location: p.geo_location,
@@ -632,16 +642,15 @@ export const generateReport1 = (req, res) => {
       }
     }
 
-    // WHERE clause
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-    // IFNULL(pm.add3, ''), ", ",
+
+    // IFNULL(pm.add3, ''), ", ", IFNULL(pm.add2, ''), ", ",
     const query = `
       SELECT 
         pm.project_id,
         pm.project_name,
         CONCAT(
                 IFNULL(pm.add1, ''), ", ",
-                IFNULL(pm.add2, ''), ", ",
                 IFNULL(pm.city, ''), ", ",
                 IFNULL(pm.pin_code, ''), ", ",
                 IFNULL(pm.district, ''), ", ",
@@ -667,10 +676,7 @@ export const generateReport1 = (req, res) => {
     db.query(query, params, (err, rows) => {
       if (err) {
         console.error('[generateReport1]', err);
-        return res.status(500).json({
-          message: 'Database error',
-          error: err.message
-        });
+        return res.status(500).json({ message: 'Database error', error: err.message });
       }
 
       res.status(200).json({

@@ -1,9 +1,7 @@
 // plot/PlotDashboard.tsx
 import { motion, AnimatePresence } from 'motion/react';
 import { ElementType, useCallback, useEffect, useRef, useState, useDeferredValue } from 'react';
-import {
-  MdOutlineCheckCircle, MdOutlineLock, MdOutlineAccessTime, MdOutlineInfo, MdOutlineWarning, MdHelpOutline, MdOutlineLayers, MdKeyboardArrowDown, MdRotateRight, MdZoomOut, MdZoomIn, MdPauseCircle, MdOutlineLan
-} from 'react-icons/md';
+import { MdOutlineCheckCircle, MdOutlineLock, MdOutlineAccessTime, MdOutlineInfo, MdOutlineWarning, MdHelpOutline, MdOutlineLayers, MdKeyboardArrowDown, MdRotateRight, MdZoomOut, MdZoomIn, MdPauseCircle, MdOutlineLan } from 'react-icons/md';
 import { FaRegFileAlt, FaRegStopCircle } from 'react-icons/fa';
 import { imgPath } from '../../../constant/BaseUrl';
 import { getAllProjects, getPlotsFromStatus, getProjectDeatils } from '../../../services/plot/plotApi';
@@ -13,12 +11,15 @@ import EditPlot from '../master/EditPlot';
 import { BiMap } from 'react-icons/bi';
 
 type PlotStatus = 'O' | 'S' | 'B' | 'R' | 'H' | 'U';
+
 const STATUS_COLORS: Record<string, string> = {
   O: '#2ECC71', H: '#F1C40F', B: '#3498DB', S: '#E74C3C', R: '#9B59B6', U: '#374151',
 };
+
 const STATUS_LABELS: Record<string, string> = {
   O: 'Open', H: 'Hold', B: 'Booked', S: 'Sold', R: 'Reserved', U: 'Unknown',
 };
+
 const STATUS_ICONS: Record<PlotStatus, ElementType> = {
   O: MdOutlineCheckCircle,
   S: MdOutlineLock,
@@ -220,9 +221,9 @@ const ImageViewer = ({ src, alt, plots, onPlotClick, }: { src: string; alt: stri
         style={{
           width: '100%',
           height: VIEWER_H,
-          overflow: 'hidden',        // already there ✓
+          overflow: 'hidden',
           position: 'relative',
-          isolation: 'isolate',      // ← ADD THIS — creates new stacking context
+          isolation: 'isolate',
           cursor: panDragging.current ? 'grabbing' : zoom > 1 ? 'grab' : 'default',
           touchAction: 'none'
         }}
@@ -296,13 +297,13 @@ const PlotCardSkeleton = () => (
 
 const PlotDashboard = () => {
   const [projects, setProjects] = useState<ProjectResponse[]>([]);
-  const [projectsLoading, setProjectsLoading] = useState(false);
+  const [projectsLoading, setProjectsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(1);
   const [projectDetails, setProjectDetails] = useState<any>(null);
-  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [detailsLoading, setDetailsLoading] = useState(true);
   const [plotStatus, setPlotStatus] = useState('O');
   const [plotDetails, setPlotDetails] = useState<any[]>([]);
-  const [plotsLoading, setPlotsLoading] = useState(false);
+  const [plotsLoading, setPlotsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
   const [showEditModal, setShowEditModal] = useState(false);

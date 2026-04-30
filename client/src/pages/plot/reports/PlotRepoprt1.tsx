@@ -21,10 +21,14 @@ export interface ProjectPlotReport {
 }
 
 const PlotRepoprt1 = () => {
+  const today = new Date();
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const formatDate = (date: Date) => date.toLocaleDateString("en-CA");
+
   const [formData, setFormData] = useState({
     status: "",
-    from_date: "",
-    to_date: ""
+    from_date: formatDate(startOfMonth),
+    to_date: formatDate(today)
   });
   const [projects, setProjects] = useState<ProjectResponse[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
@@ -45,7 +49,7 @@ const PlotRepoprt1 = () => {
     }
   };
 
-  useEffect(() => { fetchProjects() }, [])
+  useEffect(() => { fetchProjects() }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -72,9 +76,9 @@ const PlotRepoprt1 = () => {
 
   const handleCancel = () => {
     setFormData({
-      from_date: "",
       status: "",
-      to_date: ""
+      from_date: formatDate(startOfMonth),
+      to_date: formatDate(today)
     })
     setSelectedProject(0);
     setShowResult(false);
@@ -192,12 +196,13 @@ const PlotRepoprt1 = () => {
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
       <div className="max-w-full mx-auto">
+
         {/* Section 1 — Property Details */}
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 mb-2">
 
             <div className="lg:col-span-2 md:col-span-2 col-span-1">
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-700">Basic Information</h2>
+              <h2 className="font-semibold text-slate-800 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-700">Basic Information</h2>
             </div>
 
             <div>
@@ -254,6 +259,7 @@ const PlotRepoprt1 = () => {
             </div>
 
           </div>
+
           {/* Actions */}
           <div className="py-6 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-3">
             <button
@@ -269,6 +275,7 @@ const PlotRepoprt1 = () => {
               Generate Report
             </button>
           </div>
+
         </div>
 
         {/* Section 2 — Result Section */}
@@ -322,11 +329,11 @@ const PlotRepoprt1 = () => {
                         <td className="px-3 py-2 text-sm whitespace-nowrap">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium
                            ${item?.status === 'S' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                            : item?.status === 'B' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                              : item?.status === 'H' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                : item?.status === 'R' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                                : item?.status === 'O' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                  : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                              : item?.status === 'B' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                                : item?.status === 'H' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                  : item?.status === 'R' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                                    : item?.status === 'O' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                      : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
                             }`}>
                             {getStatusLabel(item?.status)}
                           </span>
@@ -359,9 +366,10 @@ const PlotRepoprt1 = () => {
             </div>
           </>
         )}
+
       </div>
     </div>
   )
 }
 
-export default PlotRepoprt1
+export default PlotRepoprt1;

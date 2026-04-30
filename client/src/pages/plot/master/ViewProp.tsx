@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { BsEye } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
@@ -13,7 +12,6 @@ export interface ProjectResponse {
   project_statistics: ProjectStatistics;
   plots: Plot[];
 }
-
 export interface ProjectDetails {
   project_id: number;
   project_name: string;
@@ -29,7 +27,6 @@ export interface ProjectDetails {
   updated_at: string;
   updated_by: number;
 }
-
 export interface Address {
   line1: string;
   line2: string;
@@ -39,7 +36,6 @@ export interface Address {
   district: string;
   state: string;
 }
-
 export interface ProjectStatistics {
   total_plots: number;
   available_plots: number;
@@ -52,7 +48,6 @@ export interface ProjectStatistics {
   average_price_per_plot: string;
   average_area_per_plot: string;
 }
-
 export interface Plot {
   plot_no: string;
   plot_sr: number;
@@ -77,7 +72,7 @@ export interface Plot {
 
 const ViewProp = () => {
   const [data, setData] = useState<ProjectResponse[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -113,12 +108,12 @@ const ViewProp = () => {
   };
 
   const filteredData = data?.filter((project: ProjectResponse) =>
-    (project?.project_details?.project_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project?.project_details?.nick_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project?.project_details?.address.city?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project?.project_details?.address.district?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project?.project_details?.address.line1?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-    (project?.project_details?.address.pin_code?.toString().toLowerCase() ?? "").includes(searchTerm.toLowerCase())
+    (project?.project_details?.project_name?.toLowerCase() ?? "").includes(searchTerm?.toLowerCase()) ||
+    (project?.project_details?.nick_name?.toLowerCase() ?? "").includes(searchTerm?.toLowerCase()) ||
+    (project?.project_details?.address?.city?.toLowerCase() ?? "").includes(searchTerm?.toLowerCase()) ||
+    (project?.project_details?.address?.district?.toLowerCase() ?? "").includes(searchTerm?.toLowerCase()) ||
+    (project?.project_details?.address?.line1?.toLowerCase() ?? "").includes(searchTerm?.toLowerCase()) ||
+    (project?.project_details?.address?.pin_code?.toString().toLowerCase() ?? "").includes(searchTerm?.toLowerCase())
   );
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -144,11 +139,12 @@ const ViewProp = () => {
               <div className="flex items-center gap-1 mt-2 text-slate-500 dark:text-slate-400 text-sm">
                 <FiMapPin className="w-3 h-3 flex-shrink-0 text-purple-700" />
                 <span className="truncate">
-                  {address.line1}, {address.city}, {address.state} - {address.pin_code}
+                  {address?.line1}, {address?.city}, {address?.district} , {address?.state} - {address?.pin_code}
                 </span>
               </div>
               <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Code: {project_details?.ext_code} | Type: {project_details?.project_type}
+                Type: {project_details?.project_type}
+                {/* Code: {project_details?.ext_code} | Type: {project_details?.project_type} */}
               </div>
             </div>
             <div className="flex justify-center gap-2">
@@ -231,7 +227,7 @@ const ViewProp = () => {
                   type="text"
                   className="block w-full pl-10 pr-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition bg-white"
                   placeholder="Search by project name, city..."
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -243,7 +239,7 @@ const ViewProp = () => {
                 <span className="text-sm text-slate-700 dark:text-slate-300">Show</span>
                 <select
                   className="py-2 px-3 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition bg-white"
-                  onChange={(e: any) => setItemsPerPage(parseInt(e.target.value))}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setItemsPerPage(parseInt(e.target.value))}
                   value={itemsPerPage}
                 >
                   {[5, 10, 25, 50].map((n) => (<option key={n} value={n}>{n}</option>))}
@@ -302,9 +298,11 @@ const ViewProp = () => {
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
+
 };
 
 export default ViewProp;

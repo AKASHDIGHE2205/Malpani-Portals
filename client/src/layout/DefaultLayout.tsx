@@ -23,9 +23,11 @@ const DefaultLayout = () => {
             <Outlet />
           </div>
         </main>
+
         <div className="sticky bottom-0 ">
           <Footer />
         </div>
+
       </div>
     </div>
   );
