@@ -75,7 +75,6 @@ export const updatePlotMaster = async (data: any) => {
   }
 };
 
-
 export const getPlotsFromStatus = async (data: any) => {
   try {
     const response = await axios.post(`${BaseUrl}/plot/getPlotsFromStatus`, data, {

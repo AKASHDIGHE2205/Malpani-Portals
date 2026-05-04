@@ -464,25 +464,9 @@ const PlotDashboard = () => {
         </div>
 
         {/* ── Layout viewer ── */}
-        <section className="overflow-hidden mb-4 rounded-lg shadow-lg">
-          {/* <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600"><MdOutlineDescription size={20} /></div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-800">Project Layout</h3>
-                <p className="text-xs text-slate-500">
-                  {detailsLoading ? 'Loading…' : placedCount > 0 ? `${placedCount} of ${plots?.length ?? 0} plots pinned` : 'Architectural masterplan'}
-                </p>
-              </div>
-            </div>
-            <button onClick={() => setIsLayoutExpanded(v => !v)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
-              {isLayoutExpanded ? <MdOutlineZoomInMap size={18} /> : <MdOutlineZoomOutMap size={18} />}
-              {isLayoutExpanded ? 'Collapse' : 'Expand'}
-            </button>
-          </div> */}
-
-          <motion.div className="relative overflow-hidden bg-slate-100">{/* animate={{ height: isLayoutExpanded ? 'auto' : `${VIEWER_H}px` }}  */}
+        <section className="overflow-hidden mb-4 rounded-lg shadow-lg border border-gray-400 dark:border-gray-300">
+          <motion.div className="relative overflow-hidden bg-slate-100">
+            {/* animate={{ height: isLayoutExpanded ? 'auto' : `${VIEWER_H}px` }}  */}
             {detailsLoading ? (
               <div className="flex items-center justify-center" style={{ height: VIEWER_H }}>
                 <div className="text-center">
@@ -500,9 +484,6 @@ const PlotDashboard = () => {
                     </div>
                   </div>
                 )}
-            {/* {!isLayoutExpanded && fileType !== 'pdf' && !detailsLoading && (
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-900/40 to-transparent pointer-events-none" />
-            )} */}
           </motion.div>
         </section>
         {/* ── Plot inventory ── */}

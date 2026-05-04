@@ -118,7 +118,6 @@ const EditProp = () => {
       const response = await getProjectDeatils(parseInt(propId));
       if (response?.data) {
         const project: ProjectResponse = response.data;
-
         // Set property data
         setPropertyData({
           project_name: project?.project_details?.project_name || "",

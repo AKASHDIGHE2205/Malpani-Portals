@@ -547,7 +547,7 @@ export const getProjectDetails = async (req, res) => {
     const p = projectRows[0];
     const plots = plotRows.map(shapePlot);
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: {
         project_details: {
