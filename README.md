@@ -103,7 +103,7 @@ This platform solves:
 * Independent modules for different business domains
 * Scalable and maintainable system design
 
-### 🎨 Interactive UI (Real Estate Module)
+### 🎨 Interactive UI
 
 * Media upload and visualization
 * Dynamic plot mapping with status-based color toggling
