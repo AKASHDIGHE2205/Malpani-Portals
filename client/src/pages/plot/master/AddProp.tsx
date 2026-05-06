@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CryptoJS from "crypto-js"
-import { useCallback, useEffect, useRef, useState } from "react"
-import toast from "react-hot-toast"
-import { CiTrash } from "react-icons/ci"
-import { useNavigate } from "react-router-dom"
-import { AddPlotProperty } from "../../../services/plot/plotApi"
-import { FiArrowLeft } from "react-icons/fi"
-import { MdFormatListBulletedAdd } from "react-icons/md"
+import CryptoJS from "crypto-js";
+import { useCallback, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { CiTrash } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { AddPlotProperty } from "../../../services/plot/plotApi";
+import { FiArrowLeft } from "react-icons/fi";
+import { MdFormatListBulletedAdd } from "react-icons/md";
 
 interface Plot {
   id: string
@@ -26,6 +26,7 @@ interface Plot {
   cX: string
   cY: string
 }
+
 interface PropertyFormData {
   project_name: string
   nick_name: string
@@ -42,6 +43,7 @@ interface PropertyFormData {
   project_type: string
   status: string
 }
+
 const STATUS_COLORS: Record<string, string> = {
   O: "#2ECC71",
   H: "#F1C40F",
@@ -51,6 +53,7 @@ const STATUS_COLORS: Record<string, string> = {
   A: "#374151",
   "": "#374151",
 }
+
 interface ViewerProps {
   src: string
   plots: Plot[]
@@ -414,10 +417,11 @@ const AddProp = () => {
       vc_remarks: "",
       cX: "",
       cY: "",
-    }])
+    }]
+    )
 
   const handleUpdatePlot = (id: string, field: keyof Plot, value: string) =>
-    setPlots(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p))
+    setPlots(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
 
   const handleDeletePlot = (id: string) => {
     if (!window.confirm("Are you sure you want to delete this plot?")) return
@@ -430,10 +434,11 @@ const AddProp = () => {
 
   // file 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]; if (!f) return
-    setSelectedFile(f)
-    setPreviewUrl(URL.createObjectURL(f))
-    setFileType(f.type === "application/pdf" ? "pdf" : "image")
+    const file = e.target.files?.[0];
+    if (!file) return
+    setSelectedFile(file)
+    setPreviewUrl(URL.createObjectURL(file))
+    setFileType(file.type === "application/pdf" ? "pdf" : "image")
   }
 
   // form
@@ -470,6 +475,8 @@ const AddProp = () => {
     if (plots.length === 0) return toast.error("Please add at least one plot for this property")
     if (plots.some(p => !p.plot_no || !p.area))
       return toast.error("Please ensure all plots have Plot Number and Area filled")
+
+    // if(){}
 
     const fd = new FormData()
     fd.append("propertyData", JSON.stringify(propertyData))

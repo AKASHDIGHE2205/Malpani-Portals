@@ -374,7 +374,6 @@ const PlotDashboard = () => {
 
   return (
     <div className="min-h-screen w-full sm:m-2 rounded-md">
-
       {/* ── Header ── */}
       <header className="relative min-h-48 w-full overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 px-6 pt-8 pb-8 text-white">
         <div className="absolute inset-0 opacity-20">

@@ -84,12 +84,12 @@ const SignUp = () => {
           <div className="hidden md:flex flex-col justify-center p-12 bg-gradient-to-br from-blue-600 to-purple-800 text-white relative">
             <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diagonal-striped-brick.png')]"></div>
             <div className="relative z-10">
-              <h2 className="text-4xl font-bold mb-6">Welcome to StoreApp</h2>
+              <h2 className="text-4xl font-bold mb-6">Welcome to Malpani Business Portals</h2>
               <p className="text-xl mb-8 opacity-90">
                 Join our community and enjoy seamless document, file, and book management.
               </p>
 
-              <div className="space-y-6">
+              {/* <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0 bg-blue-500 rounded-full p-2">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -116,7 +116,7 @@ const SignUp = () => {
                   </div>
                   <p className="text-lg">Collaboration tools</p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="mt-12 bg-white/10 backdrop-blur-sm p-6 rounded-xl">
                 <div className="flex items-center">
@@ -153,7 +153,7 @@ const SignUp = () => {
             <div className="mt-8">
               <button
                 type="button"
-                className="w-full flex justify-center items-center gap-3 py-3 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
+                className="w-full flex justify-center items-center gap-3 py-3 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm cursor-not-allowed"
                 disabled
               >
                 <svg className="w-5 h-5" viewBox="0 0 46 47" fill="none">
@@ -197,7 +197,7 @@ const SignUp = () => {
                       value={formik.values.fname}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
+                      className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
                                  ${formik.touched.fname && formik.errors.fname ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                                 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -220,7 +220,7 @@ const SignUp = () => {
                       value={formik.values.lname}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
+                      className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
                                 border ${formik.touched.lname && formik.errors.lname ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                                 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -244,7 +244,7 @@ const SignUp = () => {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
+                    className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
                                 border ${formik.touched.email && formik.errors.email ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                                 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -267,7 +267,7 @@ const SignUp = () => {
                     value={formik.values.mobile}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
+                    className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
                                 border ${formik.touched.mobile && formik.errors.mobile ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                                 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -291,7 +291,7 @@ const SignUp = () => {
                       value={formik.values.password}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
+                      className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400
                                   border ${formik.touched.password && formik.errors.password ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                   focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                                   dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -322,7 +322,7 @@ const SignUp = () => {
                     value={formik.values.cpassword}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
+                    className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
                                  ${formik.touched.cpassword && formik.errors.cpassword ?
                         'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                                 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500

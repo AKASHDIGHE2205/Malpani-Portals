@@ -66,10 +66,6 @@ const SignIn = () => {
             <div className="absolute inset-0 flex flex-col justify-center p-12 text-white">
               <h2 className="text-4xl font-bold mb-4">Welcome Back!</h2>
               <p className="text-xl mb-8">Sign in to access your personalized dashboard and continue your journey with us.</p>
-              <div className="flex items-center hidden">
-                <div className="w-12 h-1 bg-blue-300 mr-4"></div>
-                <span className="text-blue-200">Join thousands of happy users</span>
-              </div>
             </div>
           </div>
 
@@ -93,7 +89,8 @@ const SignIn = () => {
             <div className="mt-8">
               <button
                 type="button"
-                className="w-full flex justify-center items-center gap-3 py-3 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors shadow-sm "
+                className="w-full flex justify-center items-center gap-3 py-3 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors shadow-sm 
+                cursor-not-allowed"
                 disabled
               >
                 <svg
@@ -139,7 +136,7 @@ const SignIn = () => {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
+                    className={` dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
                           ${formik.touched.email && formik.errors.email ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                          focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                          dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -155,7 +152,7 @@ const SignIn = () => {
                     <label htmlFor="password" className="text-black dark:text-white">
                       Password
                     </label>
-                     <Link
+                    <Link
                       to='/forgot-password'
                       type="button"
                       className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
@@ -171,7 +168,7 @@ const SignIn = () => {
                       value={formik.values.password}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`bg-slate-100 dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
+                      className={`dark:bg-slate-800 p-3 sm:p-4 h-12 block w-full rounded-lg sm:text-sm disabled:opacity-50 disabled:pointer-events-none dark:text-slate-400 border
                           ${formik.touched.password && formik.errors.password ? 'border-red-500 dark:border-red-500' : 'border-slate-300 dark:border-slate-700'}
                          focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500
                          dark:focus:ring-blue-500 dark:focus:border-blue-500`}
@@ -190,7 +187,7 @@ const SignIn = () => {
                   )}
                 </div>
 
-                                <button
+                <button
                   type="submit"
                   disabled={loading}
                   className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}

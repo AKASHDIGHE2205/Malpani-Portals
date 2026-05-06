@@ -11,6 +11,7 @@ import { RootState } from './store/store';
 import ForgotPassword from "./pages/authentication/ForgotPassword";
 import UserView from './pages/User/UserView';
 import PlotRepoprt1 from './pages/plot/reports/PlotRepoprt1';
+import Footer from './components/Footer';
 
 const PlotDashboard = lazy(() => import('./pages/plot/Dashboard/PlotDashboard'));
 const AddProp = lazy(() => import('./pages/plot/master/AddProp'));
@@ -171,6 +172,7 @@ function MainApp() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="*" element={<Navigate to="/sign-in" />} />
+
       </Routes>
     )
   );

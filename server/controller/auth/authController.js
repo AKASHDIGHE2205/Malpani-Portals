@@ -31,7 +31,7 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const sql2 = `INSERT INTO app_users (password, first_name, last_name, email, mobile, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        db.query(sql2, [hashedPassword, f_name, l_name, email, mobile, 'User', 'A'], (err, results) => {
+        db.query(sql2, [hashedPassword, f_name, l_name, email, mobile, 'User', 'I'], (err, results) => {
           if (err) {
             console.error("Error inserting user:", err);
             return res.status(500).json({ message: "Error while registering user", details: err });
