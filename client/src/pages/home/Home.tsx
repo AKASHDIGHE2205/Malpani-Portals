@@ -1,176 +1,157 @@
+import { Store, Building2, Package, TrendingUp, BarChart3, Activity } from 'lucide-react';
+
 const Home = () => {
+  const modules = [
+    {
+      title: "Store Module",
+      description: "Handle all store-related activities including file records, inventory tracking, and transaction entries with accuracy and ease.",
+      link: "#",
+      linkText: "Access Module →",
+      icon: Store,
+      gradient: "from-emerald-500 to-teal-600",
+      bgGradient: "from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30",
+      iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
+      hoverBg: "group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50",
+      linkColor: "text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300",
+    },
+    {
+      title: "Property Management",
+      description: "Maintain and organize all records related to property sales and purchases. Keep track of ownership, deals, and documentation in one place.",
+      link: "#",
+      linkText: "Access Module →",
+      icon: Building2,
+      gradient: "from-violet-500 to-purple-600",
+      bgGradient: "from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30",
+      iconBg: "bg-violet-100 dark:bg-violet-900/30",
+      iconColor: "text-violet-600 dark:text-violet-400",
+      hoverBg: "group-hover:bg-violet-200 dark:group-hover:bg-violet-900/50",
+      linkColor: "text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300",
+    },
+    {
+      title: "Post Module",
+      description: "Track and manage all inward and outward courier entries. Ensure smooth handling of postal records and delivery logs.",
+      link: "#",
+      linkText: "Access Module →",
+      icon: Package,
+      gradient: "from-amber-500 to-orange-600",
+      bgGradient: "from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30",
+      iconBg: "bg-amber-100 dark:bg-amber-900/30",
+      iconColor: "text-amber-600 dark:text-amber-400",
+      hoverBg: "group-hover:bg-amber-200 dark:group-hover:bg-amber-900/50",
+      linkColor: "text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300",
+    },
+  ];
+
+  const features = [
+    "Centralized management of store, property, and courier data",
+    "Seamless tracking of transactions and record entries",
+    "Efficient handling of property and asset lifecycle",
+    "Secure, role-based visibility for all users",
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 px-2 py-4 md:pl-10 md:py-2">
-      {/* Hero Section */}
-      <div className="container mx-auto px-4 py-8 md:px-6 md:py-16">
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          <div className="w-full md:w-1/2">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-slate-100 leading-tight">
-              Welcome to <span className="text-orange-600 dark:text-orange-500">Malpani Group</span>
-            </h1>
-            <p className="mt-4 md:mt-6 text-base md:text-lg text-gray-600 dark:text-slate-300">
-              Malpani Group is a diversified business conglomerate with interests in Renewable Energy, FMCG, Real Estate, Hospitality, and Amusement Parks. Headquartered in Sangamner, we've played a key role in its transformation into a modern industrial hub. With a legacy of trust, social commitment, and innovation, we continue to create value across sectors while staying rooted in our values.
-            </p>
-            <div className="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3 md:gap-4">
-              <a
-                href="https://malpani.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900 text-white font-medium py-2 px-4 md:py-3 md:px-6 rounded-lg transition duration-300 text-center text-sm md:text-base"
-              >
-                Explore Our Services
-              </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-slate-950 p-6 md:p-10 font-sans transition-colors duration-300">
+      <div className="max-w-7xl mx-auto">
 
-              <a
-                href="https://malpani.com/contact/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-blue-600 dark:border-blue-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-medium py-2 px-4 md:py-3 md:px-6 rounded-lg transition duration-300 text-center text-sm md:text-base"
-              >
-                Contact Us
-              </a>
+        {/* Welcome Section with Gradient Background */}
+        <div className="relative mb-12 mt-2 overflow-hidden rounded-2xl p-8 md:p-10 shadow-xl shadow-blue-500/10">
+          <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+          <div className="relative ">{/* z-10 */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-full text-blue-700 dark:text-blue-300 text-xs font-semibold tracking-wider uppercase mb-4">
+              <Activity className="w-3.5 h-3.5" />
+              Platform Overview
             </div>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+              Welcome to Malpani Business Portal
+            </h1>
+            <p className="mt-4 max-w-3xl leading-relaxed">
+              A centralized platform to efficiently manage your business operations across multiple modules.
+              <br />
+              Select a module below to get started.
+            </p>
           </div>
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-64 h-64 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-48 h-48 rounded-full blur-3xl"></div>
+        </div>
 
-          <div className="w-full md:w-1/2 mt-6 md:mt-0">
-            {/* Slider */}
-            <div data-hs-carousel='{
-              "loadingClasses": "opacity-0",
-              "dotsItemClasses": "hs-carousel-active:bg-blue-700 hs-carousel-active:border-blue-700 size-2 md:size-3 border border-gray-400 rounded-full cursor-pointer dark:border-slate-600 dark:hs-carousel-active:bg-blue-500 dark:hs-carousel-active:border-blue-500",
-              "isAutoPlay": true
-            }' className="relative">
-              <div className="hs-carousel relative overflow-hidden w-full min-h-64 md:min-h-96 bg-white dark:bg-slate-800 rounded-lg">
-                <div className="hs-carousel-body absolute top-0 bottom-0 start-0 flex flex-nowrap transition-transform duration-700 opacity-0">
-                  <div className="hs-carousel-slide">
-                    <div className="flex justify-center h-full bg-gray-100 dark:bg-slate-900">
-                      <img
-                        src="https://i.ytimg.com/vi/lHnio5PKEdM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC0LK4Wf3ADwyv9Q6Ubaz3sK3V8gQ"
-                        alt="Modern business building"
-                        className="w-full h-full object-cover"
-                      />
+        {/* Module Cards Grid */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <BarChart3 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Business Modules</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {modules.map((mod, index) => {
+              const IconComponent = mod.icon;
+              return (
+                <div
+                  key={index}
+                  className={`relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 flex flex-col justify-between shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden hover:-translate-y-1`}
+                >
+                  {/* Top gradient line */}
+                  <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${mod.gradient}`}></div>
+
+                  <div>
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${mod.bgGradient} border border-gray-100 dark:border-gray-700 flex items-center justify-center mb-5 transition-all duration-300 ${mod.hoverBg}`}>
+                      <IconComponent className={`w-7 h-7 ${mod.iconColor}`} />
                     </div>
-                  </div>
-                  <div className="hs-carousel-slide">
-                    <div className="flex justify-center h-full bg-gray-200 dark:bg-slate-800">
-                      <img
-                        src="https://lh6.googleusercontent.com/proxy/rSngaOEOSWWUfItEOeoWHj8cnfFBOIyEJ8YUY1X1k1TiyU70MGSCSIkGwHY4zW_jQ6sBWdTZaHP0oTFIbMSGJczfOtmv4Q"
-                        alt="Modern business building"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="hs-carousel-slide">
-                    <div className="flex justify-center h-full bg-gray-300 dark:bg-slate-700">
-                      <img
-                        src="https://sargammart.com/wp-content/uploads/2024/05/sargam-rahuri-1024x576.jpeg"
-                        alt="Modern business building"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="hs-carousel-slide">
-                    <div className="flex justify-center h-full bg-gray-300 dark:bg-slate-700">
-                      <img
-                        src="https://sargammart.com/wp-content/uploads/2024/05/sargam-rahuri-1024x576.jpeg"
-                        alt="Modern business building"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-all duration-300"
+                    >
+                      {mod.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                      {mod.description}
+                    </p>
                   </div>
                 </div>
-              </div>
-
-              <button type="button" className="hs-carousel-prev hs-carousel-disabled:opacity-50 hs-carousel-disabled:pointer-events-none absolute inset-y-0 start-0 inline-flex justify-center items-center w-8 md:w-11.5 h-full text-gray-800 hover:bg-gray-800/10 focus:outline-hidden focus:bg-gray-800/10 rounded-s-lg dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                <span className="text-xl md:text-2xl" aria-hidden="true">
-                  <svg className="shrink-0 size-4 md:size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m15 18-6-6 6-6"></path>
-                  </svg>
-                </span>
-                <span className="sr-only">Previous</span>
-              </button>
-              <button type="button" className="hs-carousel-next hs-carousel-disabled:opacity-50 hs-carousel-disabled:pointer-events-none absolute inset-y-0 end-0 inline-flex justify-center items-center w-8 md:w-11.5 h-full text-gray-800 hover:bg-gray-800/10 focus:outline-hidden focus:bg-gray-800/10 rounded-e-lg dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                <span className="sr-only">Next</span>
-                <span className="text-xl md:text-2xl" aria-hidden="true">
-                  <svg className="shrink-0 size-4 md:size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m9 18 6-6-6-6"></path>
-                  </svg>
-                </span>
-              </button>
-
-              <div className="hs-carousel-pagination flex justify-center absolute bottom-2 md:bottom-3 start-0 end-0 flex gap-x-1 md:gap-x-2"></div>
-            </div>
-            {/* End Slider */}
+              );
+            })}
           </div>
         </div>
-      </div>
 
-      {/* Services Section */}
-      <div className="py-8 md:py-16 hidden">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-slate-100 mb-4">Our Services</h2>
-          <p className="text-base md:text-lg text-center text-gray-600 dark:text-slate-300 mb-8 md:mb-12 max-w-3xl mx-auto">
-            Malpani Group delivers excellence across diverse sectors, providing quality products and experiences to our customers.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {/* Real Estate */}
-            <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-md dark:shadow-slate-900 hover:shadow-lg dark:hover:shadow-slate-700 transition duration-300 border border-gray-200 dark:border-slate-700">
-              <div className="text-blue-600 dark:text-blue-400 mb-3 md:mb-4">
-                <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zm-9 .7c0-1.1.9-2 2-2s2 .9 2 2h-4z" />
-                </svg>
+        {/* Advanced Analytics Section */}
+        <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-8 md:p-10 shadow-lg">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 dark:from-blue-400/10 dark:to-purple-400/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
+
+          <div className="relative flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+            <div className="flex-1 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-full text-blue-700 dark:text-blue-300 text-xs font-semibold tracking-wider uppercase mb-4">
+                <TrendingUp className="w-3.5 h-3.5" />
+                Advanced Analytics
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Real Estate</h3>
-              <p className="text-sm md:text-base text-gray-600 dark:text-slate-300">Premium residential and commercial properties developed with innovative design and sustainable practices.</p>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+                Data-Driven Decision Making
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                Leverage intelligent analytics to convert raw data into meaningful insights. Monitor performance across all modules with automated reporting, detect anomalies instantly, and drive informed decision-making with confidence.
+              </p>
+              <ul className="space-y-4">
+                {features.map((feat, idx) => (
+                  <li key={idx} className="flex items-start gap-4 text-gray-700 dark:text-gray-300 group">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-base">{feat}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            {/* Super Shops */}
-            <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl shadow-md dark:shadow-slate-900 hover:shadow-lg dark:hover:shadow-slate-700 transition duration-300 border border-gray-200 dark:border-slate-700">
-              <div className="text-blue-600 dark:text-blue-400 mb-3 md:mb-4">
-                <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-                </svg>
+            <div className="hidden lg:block lg:w-2/5">
+              <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 rounded-xl h-full min-h-[300px] w-full overflow-hidden border border-blue-100/50 dark:border-gray-700/50 shadow-inner">
+                <img
+                  src="https://employment-social-affairs.ec.europa.eu/sites/default/files/styles/oe_theme_ratio_3_2_medium/public/2025-08/AdobeStock_1357126576.jpeg?h=caf26d13&itok=NG1yp8uT"
+                  alt="Analytics Dashboard"
+                  className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+                />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Super Shops</h3>
-              <p className="text-sm md:text-base text-gray-600 dark:text-slate-300">Modern retail supermarkets offering a wide range of products with exceptional customer service and convenience.</p>
-            </div>
-
-            {/* FMCG */}
-            <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl shadow-md dark:shadow-slate-900 hover:shadow-lg dark:hover:shadow-slate-700 transition duration-300 border border-gray-200 dark:border-slate-700">
-              <div className="text-blue-600 dark:text-blue-400 mb-3 md:mb-4">
-                <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
-                </svg>
-              </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">FMCG</h3>
-              <p className="text-sm md:text-base text-gray-600 dark:text-slate-300">Fast-moving consumer goods that meet the daily needs of households with quality and affordability.</p>
-            </div>
-
-            {/* Water Parks */}
-            <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl shadow-md dark:shadow-slate-900 hover:shadow-lg dark:hover:shadow-slate-700 transition duration-300 border border-gray-200 dark:border-slate-700">
-              <div className="text-blue-600 dark:text-blue-400 mb-3 md:mb-4">
-                <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M21 12.22C21 6.73 16.74 3 12 3c-4.69 0-9 3.65-9 9.28-.6.34-1 .98-1 1.72v2c0 1.1.9 2 2 2h1v-6.1c0-3.87 3.13-7 7-7s7 3.13 7 7V19h-8v2h8c1.1 0 2-.9 2-2v-1.22c.59-.31 1-.92 1-1.64v-2.3c0-.7-.41-1.31-1-1.62z" />
-                  <circle cx="9" cy="13" r="1" />
-                  <circle cx="15" cy="13" r="1" />
-                  <path d="M18 11.03C17.52 8.18 15.04 6 12.05 6c-3.03 0-6.29 2.51-6.03 6.45 2.47-1.01 4.33-3.21 4.86-5.89 1.31 2.63 4 4.44 7.12 4.47z" />
-                </svg>
-              </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Water Parks</h3>
-              <p className="text-sm md:text-base text-gray-600 dark:text-slate-300">Exciting and safe water-based entertainment destinations for families and thrill-seekers alike.</p>
-            </div>
-
-            {/* Skincare */}
-            <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl shadow-md dark:shadow-slate-900 hover:shadow-lg dark:hover:shadow-slate-700 transition duration-300 border border-gray-200 dark:border-slate-700">
-              <div className="text-blue-600 dark:text-blue-400 mb-3 md:mb-4">
-                <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5 .53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.59-1.85-1.43-2.25.84-.4 1.43-1.25 1.43-2.25 0-1.38-1.12-2.5-2.5-2.5-.53 0-1.01.16-1.42.44l.02-.19C14.5 2.12 13.38 1 12 1S9.5 2.12 9.5 3.5l.02.19c-.4-.28-.89-.44-1.42-.44-1.38 0-2.5 1.12-2.5 2.5 0 1 .59 1.85 1.43 2.25-.84.4-1.43 1.25-1.43 2.25zM12 5.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8s1.12-2.5 2.5-2.5zM3 13c0 4.97 4.03 9 9 9 0-4.97-4.03-9-9-9z" />
-                </svg>
-              </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Skincare</h3>
-              <p className="text-sm md:text-base text-gray-600 dark:text-slate-300">Premium skincare products formulated with natural ingredients for healthy and radiant skin.</p>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -399,7 +399,7 @@ const AddProp = () => {
 
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
-  const handleAddPlot = () =>
+  const handleAddPlot = () => {
     setPlots(prev => [...prev, {
       id: generateId(),
       plot_sr: (prev.length + 1).toString(),
@@ -419,9 +419,11 @@ const AddProp = () => {
       cY: "",
     }]
     )
+  }
 
-  const handleUpdatePlot = (id: string, field: keyof Plot, value: string) =>
+  const handleUpdatePlot = (id: string, field: keyof Plot, value: string) => {
     setPlots(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+  }
 
   const handleDeletePlot = (id: string) => {
     if (!window.confirm("Are you sure you want to delete this plot?")) return
@@ -470,22 +472,36 @@ const AddProp = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!propertyData.project_name || !propertyData.city || !propertyData.state)
-      return toast.error("Please fill in all required fields (Project Name, City, State)")
-    if (plots.length === 0) return toast.error("Please add at least one plot for this property")
-    if (plots.some(p => !p.plot_no || !p.area))
-      return toast.error("Please ensure all plots have Plot Number and Area filled")
+    if (!propertyData.project_name || !propertyData.city || !propertyData.state) {
+      return toast.error("Please fill in all required fields (Project Name, City, State)");
+    }
+    if (plots.length === 0) {
+      return toast.error("Please add at least one plot for this property");
+    }
+    if (plots.some(p => !p.plot_no || !p.area)) {
+      return toast.error("Please ensure all plots have Plot Number and Area filled");
+    }
 
-    // if(){}
+    let sum = 0;
+    for (let i = 0; i < plots.length; i++) {
+      sum += parseFloat(plots[i].area) || 0;
+    }
 
-    const fd = new FormData()
-    fd.append("propertyData", JSON.stringify(propertyData))
-    fd.append("plots", JSON.stringify(plots))
-    fd.append("userId", JSON.stringify(user?.user?.id || 0))
-    if (selectedFile) fd.append("file", selectedFile)
+    if (sum !== Number(propertyData.area_name)) {
+      toast.error(`Please ensure that the total area of all plots (${sum}) equals the property area (${propertyData.area_name}).`)
+    }
 
-    const res = await AddPlotProperty(fd)
-    if (res) { toast.success(res?.message || "Project added successfully"); handleCancel() }
+    const formData = new FormData()
+    formData.append("propertyData", JSON.stringify(propertyData))
+    formData.append("plots", JSON.stringify(plots))
+    formData.append("userId", JSON.stringify(user?.user?.id || 0))
+    if (selectedFile) formData.append("file", selectedFile)
+
+    const response = await AddPlotProperty(formData)
+    if (response) {
+      toast.success(response?.message || "Project added successfully");
+      handleCancel();
+    }
   }
 
   const unplacedPlots = plots.filter(p => p.cX === "" || p.cY === "")
@@ -676,14 +692,8 @@ const AddProp = () => {
           {/* Section 2 — Plots */}
           <div className="p-6 border-t border-slate-200 dark:border-slate-700">
             <div className="lg:col-span-3">
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h2>
+              <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Plots Information</h2>
             </div>
-            {/* <div className="mb-4 flex justify-end">
-              <button type="button" onClick={handleAddPlot}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
-                <MdFormatListBulletedAdd size={18} /> Add Plot
-              </button>
-            </div> */}
 
             {plots.length > 0 ? (
               <div className="overflow-x-auto overflow-y-auto max-h-[400px] rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
@@ -755,12 +765,14 @@ const AddProp = () => {
                 <p className="text-slate-500 text-sm mt-1">Click "Add Plot" to add plots for this property</p>
               </div>
             )}
+            
             <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleAddPlot}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
                 <MdFormatListBulletedAdd size={18} /> Add Plot
               </button>
             </div>
+
           </div>
 
           {/* Section 3 — Interactive Placement (image only) */}
@@ -849,6 +861,7 @@ const AddProp = () => {
               Submit
             </button>
           </div>
+
         </form>
       </div>
     </div>

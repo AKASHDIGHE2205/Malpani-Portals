@@ -150,13 +150,13 @@ const ViewProp = () => {
             <div className="flex justify-center gap-2">
               <Link
                 to={`/plot/master/plot-edit?propId=${project_details?.project_id}&isEdit=false`}
-                className="px-4 py-2 text-sm font-medium rounded-lg bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-600 transition-colors flex items-center gap-1"
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-green-100 dark:bg-green-600 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-700 transition-colors flex items-center gap-1"
               >
                 <BsEye className="w-4 h-4" />
               </Link>
               <Link
                 to={`/plot/master/plot-edit?propId=${project_details?.project_id}&isEdit=true`}
-                className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-100 dark:bg-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center gap-1"
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-700 transition-colors flex items-center gap-1"
               >
                 <CiEdit className="w-6 h-6" />
               </Link>
