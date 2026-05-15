@@ -359,7 +359,6 @@ const ImageLayoutViewer = ({ src, plots, onMarkerDrop, pendingId, onPlaced }: Vi
 }
 
 //Main AddProp
-
 const AddProp = () => {
   const [propertyData, setPropertyData] = useState<PropertyFormData>({
     project_name: "",
@@ -504,8 +503,8 @@ const AddProp = () => {
     }
   }
 
-  const unplacedPlots = plots.filter(p => p.cX === "" || p.cY === "")
-  const placedPlots = plots.filter(p => p.cX !== "" && p.cY !== "")
+  const unplacedPlots = plots.filter(p => p.cX === "" || p.cY === "");
+  const placedPlots = plots.filter(p => p.cX !== "" && p.cY !== "");
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-900 p-4">
@@ -765,7 +764,7 @@ const AddProp = () => {
                 <p className="text-slate-500 text-sm mt-1">Click "Add Plot" to add plots for this property</p>
               </div>
             )}
-            
+
             <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleAddPlot}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md">
@@ -863,6 +862,7 @@ const AddProp = () => {
           </div>
 
         </form>
+
       </div>
     </div>
   )
