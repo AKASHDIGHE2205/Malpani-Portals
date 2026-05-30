@@ -77,7 +77,7 @@ export const UpdateOtp = async (data: any) => {
   } catch (error: any) {
     toast.error(
       error.response?.data?.message ||
-        "failed to reset password. Please try again."
+      "failed to reset password. Please try again."
     );
     throw error;
   }

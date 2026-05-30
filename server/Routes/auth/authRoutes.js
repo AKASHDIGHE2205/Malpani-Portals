@@ -3,6 +3,7 @@ import { registerUser, loginUser, sendOtp, validateOtp, updatePassword, getAllUs
 
 const router = express.Router();
 
+// ---------------- Auth Routes ----------------//
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/sendotp', sendOtp);

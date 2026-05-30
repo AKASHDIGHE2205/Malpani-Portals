@@ -20,7 +20,6 @@ import {
   getSaleModalDat, getSaleProperty, newSaleProperty_old, newSaleProperty, getAllSaledProp, updateSaledProp
 } from "../../controller/property/propTranController.js"
 import { propertyRegisterOld, locationwiseRegister, locationServeyRegister, propertyRegister } from "../../controller/property/propReportController.js"
-
 import multer from 'multer';
 
 // Configure multer to store files with unique names

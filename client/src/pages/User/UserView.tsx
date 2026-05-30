@@ -48,13 +48,12 @@ const UserView = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentItems = data?.filter(
-      (item: any) =>
-        (item?.first_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-        (item?.last_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-        (item?.email?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-        (item?.mobile?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
-    ).slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data?.filter((item: any) =>
+    (item?.first_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (item?.last_name?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (item?.email?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+    (item?.mobile?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
+  ).slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="min-h-screen w-full bg-white dark:bg-slate-900 p-4 md:p-6">
@@ -205,11 +204,10 @@ const UserView = () => {
                       <td className="px-6 py-2 whitespace-nowrap text-sm">
                         <span
                           className={`inline-flex items-center gap-x-1.5 py-1 px-3 rounded-full text-xs font-medium 
-                          ${
-                            item.status === "A"
+                          ${item.status === "A"
                               ? "bg-teal-100 text-teal-800 dark:bg-teal-800/30 dark:text-teal-500"
                               : "bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-500"
-                          }`}
+                            }`}
                         >
                           {item.status === "A" ? "Active" : "Inactive"}
                         </span>
